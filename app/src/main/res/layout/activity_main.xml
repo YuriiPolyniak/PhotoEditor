@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/back"
+    tools:context="com.project.yura.photoeditor.MainActivity">
+
+    <ImageButton
+        android:id="@+id/camera_button"
+        style="@style/AppTheme.MainPageButton"
+        android:src="@drawable/camera_icon" />
+    <ImageButton
+        android:id="@+id/library_button"
+        style="@style/AppTheme.MainPageButton"
+        android:src="@drawable/library_icon" />
+</LinearLayout>
