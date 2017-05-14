@@ -1,41 +1,24 @@
 package com.project.yura.photoeditor;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.project.yura.photoeditor.Model.CurrentSession;
 import com.project.yura.photoeditor.Model.Helper;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -43,14 +26,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class EditImageActivity extends AppCompatActivity {
-    public static String IMAGE_TO_EDIT_URI = "image_uri";
+    public static final String IMAGE_TO_EDIT_URI = "image_uri";
     @BindView(R.id.imageToEdit) ImageView imageView;
     @BindView(R.id.preview_button) ImageView previewButton;
 
-    Bitmap originalBitmap;
+    private Bitmap originalBitmap;
     //Bitmap currentBitmap = null;
-    CurrentSession currentSession;
-    boolean displayOriginal = false;
+    private CurrentSession currentSession;
+    private boolean displayOriginal = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +150,8 @@ public class EditImageActivity extends AppCompatActivity {
 //        imageView.setImageMatrix(m);
 //    }
 
-    float mx, my;
+    private float mx;
+    private float my;
    // ScrollView vScroll;
    // HorizontalScrollView hScroll;
 
@@ -225,7 +209,7 @@ public class EditImageActivity extends AppCompatActivity {
         if (!displayOriginal){
             imageView.setImageBitmap(currentSession.currentBitmap);
         } else {
-            previewClick(null);
+            previewClick();
         }
     }
 
@@ -266,7 +250,7 @@ public class EditImageActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.preview_button)
-    public void previewClick(View view) {
+    void previewClick() {
         if (currentSession.currentBitmap != null) {
             if (displayOriginal) {
                 imageView.setImageBitmap(currentSession.currentBitmap);

@@ -1,4 +1,4 @@
-package com.project.yura.photoeditor;
+package com.project.yura.photoeditor.Dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +17,7 @@ import com.flask.colorpicker.ColorPickerView;
 import com.flask.colorpicker.slider.OnValueChangedListener;
 import com.project.yura.photoeditor.CustomViews.RadiusSlider;
 import com.project.yura.photoeditor.Model.HSL_Helper;
+import com.project.yura.photoeditor.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +25,8 @@ import butterknife.ButterKnife;
 public class ColorPickerDialog extends DialogFragment {
     //DialogInterface.OnClickListener positiveListener;
     //int initialColor;
-    int color, radius;
+    private int color;
+    private int radius;
     private IUpdate iUpdate;
     @BindView(R.id.color_picker_view) ColorPickerView colorPickerView;
     //@BindView(R.id.v_lightness_slider) LightnessSlider lightnessSlider;
@@ -58,43 +60,7 @@ public class ColorPickerDialog extends DialogFragment {
         colorPickerView.setInitialColor(color, false);
         //radiusSeekBar.setProgress(50);
         buildPreviewColors();
-
-        /*LinearGradient test = new LinearGradient(0.f, 0.f, 300.f, 0.0f,
-
-                new int[] { 0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFF00FFFF,
-                        0xFFFF0000, 0xFFFF00FF, 0xFFFFFF00, 0xFFFFFFFF},
-                null, Shader.TileMode.CLAMP);
-        ShapeDrawable shape = new ShapeDrawable(new RectShape());
-        shape.getPaint().setShader(test);
-        radiusSeekBar.setProgressDrawable( (Drawable)shape );*/
-        /*GradientDrawable gradient = new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT, new int[]{Color.RED, Color.BLACK});*/
-        //radiusSeekBar.setBackgroundResource(R.color.colorPrimary);
-        //radiusSeekBar.setProgressDrawable(gradient);
-        //radiusSeekBar.setProgressDrawable(new ColorDrawable(Color.CYAN));
-
-//        int seekBarColor = getResources().getColor(R.color.colorPrimaryDark);
-//        radiusSeekBar.getProgressDrawable().setColorFilter(seekBarColor, PorterDuff.Mode.SRC_IN);
-//        radiusSeekBar.getThumb().setColorFilter(seekBarColor, PorterDuff.Mode.SRC_IN);
-//
-//        radiusSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-//            @Override
-//            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-//
-//            }
-//
-//            @Override
-//            public void onStartTrackingTouch(SeekBar seekBar) {
-//
-//            }
-//
-//            @Override
-//            public void onStopTrackingTouch(SeekBar seekBar) {
-//                radius = seekBar.getProgress();
-//                buildPreviewColors();
-//            }
-//        });
-
+        
         radiusSlider.setOnValueChangedListener(new OnValueChangedListener() {
             @Override
             public void onValueChanged(float v) {
@@ -139,7 +105,7 @@ public class ColorPickerDialog extends DialogFragment {
         return dialog;
     }
 
-    void buildPreviewColors(){
+    private void buildPreviewColors(){
         float hsvRadius = radius;
         float centerHue;
         float[] hsv = new float[3];
@@ -178,7 +144,7 @@ public class ColorPickerDialog extends DialogFragment {
 //        return digit - (int) digit;
 //    }
 
-    public static GradientDrawable drawCircle (Context context, int width, int height, int color) {
+    private static GradientDrawable drawCircle(Context context, int width, int height, int color) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(color);
         drawable.setShape(GradientDrawable.OVAL);

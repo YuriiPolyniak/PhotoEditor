@@ -70,4 +70,16 @@
         <item name="android:gravity">center</item>
         <item name="android:textColor">@color/darkOrange</item>
     </style>
+
+    <style name="AppTheme.InputNewFilterElement">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">65dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:inputType">numberSigned|numberDecimal</item>
+        <item name="android:textColor">@color/colorText</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">0.0</item>
+        <item name="android:selectAllOnFocus">true</item>
+    </style>
 </resources>

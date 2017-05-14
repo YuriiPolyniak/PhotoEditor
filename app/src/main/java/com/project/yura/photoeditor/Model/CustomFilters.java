@@ -5,9 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.renderscript.Allocation;
 import android.renderscript.Element;
 import android.renderscript.RenderScript;
@@ -18,34 +16,17 @@ import android.util.Log;
 
 import com.project.yura.photoeditor.R;
 
+import java.util.Map;
+
 public class CustomFilters extends BaseFilter{
     private Context context = null;
 
     public CustomFilters (Context context) {
         this.context = context;
     }
-//
-//    public HashMap<Filter, IFilter>  GetFilters() {
-//        HashMap<Filter, IFilter>  filters = new HashMap<>();
-//        filters.put(Filter.GrayScale, new GrayScaleFilter());
-//        filters.put(Filter.Polaroid, new PolaroidFilter());
-//        filters.put(Filter.Inverse, new InverseFilter());
-//        filters.put(Filter.Sepia, new SepiaFilter());
-//        filters.put(Filter.BlackAndWhite, new BlackAndWhiteFilter());
-//        filters.put(Filter.Blur, new BlurFilter());
-//        filters.put(Filter.Emboss, new EmbossFilter());
-//        filters.put(Filter.Sharpen, new SharpenFilter());
-//        filters.put(Filter.EdgeEnhance, new EdgeEnhanceFilter());
-//        filters.put(Filter.GaussianBlur, new GaussianBlurFilter());
-//        filters.put(Filter.MyGrayScale, new MyGrayScaleFilter());
-//        filters.put(Filter.My2GrayScale, new My2GrayScaleFilter());
-//        filters.put(Filter.MyBlackAndWhite, new MyBlackAndWhiteFilter());
-//        filters.put(Filter.MyAdjust, new MyAdjustFilter());
-//        return filters;
-//    }
 
-    public IFilter[] GetFilters() {
-        IFilter[] filters = new IFilter[]{
+    public IFilter[] getFilters() {
+        return new IFilter[]{
                 new GrayScaleFilter(),
                 new PolaroidFilter(),
                 new InverseFilter(),
@@ -67,30 +48,56 @@ public class CustomFilters extends BaseFilter{
                 //new BalanceFilter(),
                 //new Balance2Filter(),
                 new OverlayFilter(),
+                //new Sepia1Filter()
         };
-
-        return filters;
     }
 
-//    public enum Filter {
-//        GrayScale,
-//        Polaroid,
-//        Inverse,
-//        Sepia,
-//        BlackAndWhite,
-//        Blur,
-//        GaussianBlur,
-//        Emboss,
-//        Sharpen,
-//        EdgeEnhance,
-//        MyGrayScale,
-//        My2GrayScale,
-//        MyBlackAndWhite,
-//        MyAdjust
-//    }
+    private IFilter getFilter(final String name, final float[] array) {
+        if (array == null || array.length != 20)
+            return null;
 
-    public class GrayScaleFilter implements IFilter {
-        private String name = "GrayScale";
+        return new IFilter() {
+            final String filterName = name;
+            final float[] colorMatrix = array;
+
+            @Override
+            public String getName() {
+                return filterName;
+            }
+
+            @Override
+            public Bitmap applyFilter(Bitmap image, int weight) {
+                ColorMatrix matrix = new ColorMatrix();
+
+                matrix.set(colorMatrix);
+
+                return applyColorMatrix(image, matrix);
+            }
+
+            @Override
+            public boolean hasWeight() {
+                return false;
+            }
+        };
+    }
+
+    public IFilter[] getCustomFilters() {
+        Map<String, float[]> arrays = new PreferencesHelper(context).getCustomFiltersMatrix();
+        Object[] keys = arrays.keySet().toArray();
+
+        IFilter[] customFilters = new IFilter[keys.length];
+
+        for (int i = 0; i < keys.length; i++) {
+            customFilters[i] = getFilter((String) keys[i], arrays.get(keys[i]));
+        }
+
+        return customFilters;
+    }
+
+    //region Filters
+
+    private class GrayScaleFilter implements IFilter {
+        private final String name = "GrayScale";
 
         @Override
         public String getName() {
@@ -120,8 +127,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class PolaroidFilter implements IFilter {
-        private String name = "Polaroid";
+    private class PolaroidFilter implements IFilter {
+        private final String name = "Polaroid";
 
         @Override
         public String getName() {
@@ -158,8 +165,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class InverseFilter implements IFilter {
-        private String name = "Inverse";
+    private class InverseFilter implements IFilter {
+        private final String name = "Inverse";
 
         @Override
         public String getName() {
@@ -187,8 +194,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class SepiaFilter implements IFilter {
-        private String name = "Sepia";
+    private class SepiaFilter implements IFilter {
+        private final String name = "Sepia";
 
         @Override
         public String getName() {
@@ -197,10 +204,24 @@ public class CustomFilters extends BaseFilter{
 
         @Override
         public Bitmap applyFilter(Bitmap image, int weight) {
-            float fWeight = weight / 100.0f;
+            float fW = 1 - weight / 100.0f;
 
             ColorMatrix colorMatrix = new ColorMatrix();
-            colorMatrix.setSaturation(1 - fWeight);
+            //colorMatrix.setSaturation(1 - fWeight);
+            float invSat = 1 - fW;
+            float R = 0.213f * invSat;
+            float G = 0.715f * invSat;
+            float B = 0.072f * invSat;
+
+            float[] coefficients = new float[]{
+                    R + fW, G,      B,      0, 0,
+                    R,      G + fW, B,      0, 0,
+                    R,      G,      B + fW, 0, 0,
+                    0,      0,      0,      1, 0,
+            };
+
+            colorMatrix.set(coefficients);
+            ///////
             ColorMatrix colorScale = new ColorMatrix();
             colorScale.setScale(1, 1, 0.8f, 1);
             colorMatrix.postConcat(colorScale);
@@ -214,8 +235,36 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class BlackAndWhiteFilter implements IFilter {
-        private String name = "B & W";
+    private class Sepia1Filter implements IFilter {
+        private final String name = "Sepia1";
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public Bitmap applyFilter(Bitmap image, int weight) {
+            float fWeight = weight / 100.0f;
+
+            ColorMatrix colorMatrix = new ColorMatrix();
+            colorMatrix.setSaturation(1 - fWeight);
+
+            ColorMatrix colorScale = new ColorMatrix();
+            colorScale.setScale(1, 1, 0.8f, 1);
+            colorMatrix.postConcat(colorScale);
+
+            return applyColorMatrix(image, colorMatrix);
+        }
+
+        @Override
+        public boolean hasWeight() {
+            return true;
+        }
+    }
+
+    private class BlackAndWhiteFilter implements IFilter {
+        private final String name = "B & W";
 
         @Override
         public String getName() {
@@ -247,8 +296,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class BlurFilter implements IFilter {
-        private String name = "Blur";
+    private class BlurFilter implements IFilter {
+        private final String name = "Blur";
 
         @Override
         public String getName() {
@@ -290,8 +339,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class EmbossFilter implements IFilter {
-        private String name = "Emboss";
+    private class EmbossFilter implements IFilter {
+        private final String name = "Emboss";
 
         @Override
         public String getName() {
@@ -339,8 +388,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class SharpenFilter implements IFilter {
-        private String name = "Sharpen";
+    private class SharpenFilter implements IFilter {
+        private final String name = "Sharpen";
 
         @Override
         public String getName() {
@@ -388,8 +437,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class EdgeEnhanceFilter implements IFilter {
-        private String name = "Edge";
+    private class EdgeEnhanceFilter implements IFilter {
+        private final String name = "Edge";
 
         @Override
         public String getName() {
@@ -437,8 +486,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class GaussianBlurFilter implements IFilter {
-        private String name = "Gauss";
+    private class GaussianBlurFilter implements IFilter {
+        private final String name = "Gauss";
 
         @Override
         public String getName() {
@@ -506,7 +555,7 @@ public class CustomFilters extends BaseFilter{
 
 
     public class MyGrayScaleFilter implements IFilter {
-        private String name = "GrayScale1";
+        private final String name = "GrayScale1";
 
         @Override
         public String getName() {
@@ -558,8 +607,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class My2GrayScaleFilter implements IFilter {
-        private String name = "GrayScale2";
+    private class My2GrayScaleFilter implements IFilter {
+        private final String name = "GrayScale2";
 
         @Override
         public String getName() {
@@ -645,8 +694,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class MyBlackAndWhiteFilter implements IFilter {
-        private String name = "B & W 2";
+    private class MyBlackAndWhiteFilter implements IFilter {
+        private final String name = "B & W 2";
 
         @Override
         public String getName() {
@@ -696,7 +745,7 @@ public class CustomFilters extends BaseFilter{
 
 
     public class BrightnessFilter implements IFilter {
-        private String name = "Brightness";
+        private final String name = "Brightness";
 
         @Override
         public String getName() {
@@ -725,7 +774,7 @@ public class CustomFilters extends BaseFilter{
     }
 
     public class ContrastFilter implements IFilter {
-        private String name = "CONTRAST";
+        private final String name = "CONTRAST";
 
         @Override
         public String getName() {
@@ -753,8 +802,8 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class SaturationFilter implements IFilter {
-        private String name = "SATURATION(not)";
+    private class SaturationFilter implements IFilter {
+        private final String name = "SATURATION(not)";
 
         @Override
         public String getName() {
@@ -795,7 +844,7 @@ public class CustomFilters extends BaseFilter{
     }
 
     public class AltSaturationFilter implements IFilter {
-        private String name = "SATURATION";
+        private final String name = "SATURATION";
 
         @Override
         public String getName() {
@@ -822,7 +871,7 @@ public class CustomFilters extends BaseFilter{
     }
 
     public class BalanceFilter implements IFilter {
-        private String name = "Color";
+        private final String name = "Color";
 
         @Override
         public String getName() {
@@ -872,7 +921,7 @@ public class CustomFilters extends BaseFilter{
     }
 
     public class Balance2Filter implements IFilter {
-        private String name = "Color";
+        private final String name = "Color";
 
         @Override
         public String getName() {
@@ -960,9 +1009,9 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    public class OverlayFilter implements IFilter {
-        private String name = "Old";
-        private Bitmap pattern;
+    private class OverlayFilter implements IFilter {
+        private final String name = "Old";
+        private final Bitmap pattern;
 
         public OverlayFilter(){
             pattern = BitmapFactory.decodeResource(context.getResources(), R.drawable.background1);
@@ -1022,5 +1071,6 @@ public class CustomFilters extends BaseFilter{
             return false;
         }
     }
+    //endregion
 
 }

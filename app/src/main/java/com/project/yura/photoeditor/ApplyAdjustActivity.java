@@ -3,17 +3,16 @@ package com.project.yura.photoeditor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
-import android.media.ExifInterface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.project.yura.photoeditor.Dialog.ColorPickerDialog;
 import com.project.yura.photoeditor.Model.CurrentSession;
 import com.project.yura.photoeditor.Model.CustomAdjust;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -143,7 +142,7 @@ implements ColorPickerDialog.IUpdate {
 
     // show image without change (and hide)
     @OnClick(R.id.preview_button)
-    public void previewClick(View view) {
+    void previewClick(View view) {
         if (editedBitmap != null) {
             if (displayOriginal) {
                 imageView.setImageBitmap(editedBitmap);
@@ -159,7 +158,7 @@ implements ColorPickerDialog.IUpdate {
 
     // hide action bar
     @OnClick(R.id.resize_button)
-    public void resizeClick(View view) {
+    void resizeClick(View view) {
 //        TransitionSet transitionSet = new TransitionSet();
 //        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
 //        transitionSet.addTransition(new AutoTransition());
@@ -285,7 +284,7 @@ implements ColorPickerDialog.IUpdate {
         onBackPressed();
     }
 
-    public void selectAdjust(CustomAdjust.AdjustType type, View view) {
+    void selectAdjust(CustomAdjust.AdjustType type, View view) {
         if (type == CustomAdjust.AdjustType.BALANCE) {
             seekBarBalance.setVisibility(View.VISIBLE);
            // adjustParameters.update(type, 50);
@@ -382,9 +381,9 @@ implements ColorPickerDialog.IUpdate {
         }
     }
 
-    boolean lastEditWasBalance = false;
-    int lastBalanceColor = 0;
-    private void applyFilter(boolean balance) {
+    private boolean lastEditWasBalance = false;
+    private int lastBalanceColor = 0;
+    void applyFilter(boolean balance) {
         if (balance) {
             if (!lastEditWasBalance) {
                 lastEditWasBalance = true;
@@ -405,7 +404,7 @@ implements ColorPickerDialog.IUpdate {
             }
 
             //apply adjust
-            editedBitmap = customAdjust.AdjustBalance(balanceEditedBitmap, adjustParameters);
+            editedBitmap = customAdjust.adjustBalance(balanceEditedBitmap, adjustParameters);
         } else {
             if (lastEditWasBalance) {
                 lastEditWasBalance = false;
@@ -415,9 +414,9 @@ implements ColorPickerDialog.IUpdate {
                 adjustParameters.update(CustomAdjust.AdjustType.BALANCE, 50);
             }
 
-            editedBitmap = customAdjust.AdjustBrightness(scaledOriginalBitmap, adjustParameters);
-            editedBitmap = customAdjust.AdjustContrast(editedBitmap, adjustParameters);
-            editedBitmap = customAdjust.AdjustSaturation(editedBitmap, adjustParameters);
+            editedBitmap = customAdjust.adjustBrightness(scaledOriginalBitmap, adjustParameters);
+            editedBitmap = customAdjust.adjustContrast(editedBitmap, adjustParameters);
+            editedBitmap = customAdjust.adjustSaturation(editedBitmap, adjustParameters);
 
             //balanceEditedBitmap = editedBitmap;
         }

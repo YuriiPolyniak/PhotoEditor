@@ -41,4 +41,5 @@ dependencies {
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 
     compile 'com.theartofdev.edmodo:android-image-cropper:2.4.0'
+    compile 'com.google.code.gson:gson:2.6.2'
 }

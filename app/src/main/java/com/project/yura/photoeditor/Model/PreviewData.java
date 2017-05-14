@@ -3,15 +3,17 @@ package com.project.yura.photoeditor.Model;
 import android.graphics.Bitmap;
 
 public class PreviewData {
-    private Bitmap bitmap;
+    private final Bitmap bitmap;
     private boolean isLiked;
+    private final boolean isCustom;
     private IFilter filter = null;
 
-    public PreviewData(/*String name, */ Bitmap bitmap, IFilter filter, boolean isLiked) {
+    public PreviewData(/*String name, */ Bitmap bitmap, IFilter filter, boolean isLiked, boolean isCustom) {
        // this.name = name;
         this.bitmap = bitmap;
         this.filter = filter;
         this.isLiked = isLiked;
+        this.isCustom = isCustom;
     }
 
 //    public String getName() {
@@ -36,6 +38,10 @@ public class PreviewData {
 
     public boolean getIsLiked() {
         return isLiked;
+    }
+
+    public boolean getIsCustom() {
+        return isCustom;
     }
 
     public void setIsLiked(boolean liked) {

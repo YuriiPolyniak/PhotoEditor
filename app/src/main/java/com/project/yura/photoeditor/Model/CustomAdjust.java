@@ -98,7 +98,7 @@ public class CustomAdjust extends BaseFilter {
         }
     }
 
-    public Bitmap AdjustBrightness(Bitmap image, AdjustParameters weight) {
+    public Bitmap adjustBrightness(Bitmap image, AdjustParameters weight) {
         float fWeight = weight.bright * 3 - 150;
 
         ColorMatrix colorMatrix = new ColorMatrix();
@@ -112,7 +112,7 @@ public class CustomAdjust extends BaseFilter {
         return applyColorMatrix(image, colorMatrix);
     }
 
-    public Bitmap AdjustContrast(Bitmap image, AdjustParameters weight) {
+    public Bitmap adjustContrast(Bitmap image, AdjustParameters weight) {
         float c = weight.contrast / 100.0f * 1.6f + 0.2f;
         float t = (1.0f - c) / 2.0f;
         ColorMatrix colorMatrix = new ColorMatrix();
@@ -126,7 +126,7 @@ public class CustomAdjust extends BaseFilter {
         return applyColorMatrix(image, colorMatrix);
     }
 
-    public Bitmap AdjustBalance(Bitmap image, AdjustParameters parameters) {
+    public Bitmap adjustBalance(Bitmap image, AdjustParameters parameters) {
         final float weight = parameters.balance / 50f - 1;
         final float radius = parameters.balanceRadius;
         float[] hsv = new float[3];
@@ -221,7 +221,7 @@ public class CustomAdjust extends BaseFilter {
         return applyColorMatrix(image, colorMatrix);*/
     }
 
-    public Bitmap AdjustSaturation(Bitmap image, AdjustParameters weight) {
+    public Bitmap adjustSaturation(Bitmap image, AdjustParameters weight) {
         float fWeight = weight.saturation / 50.0f ;
 
         if (fWeight > 1) {

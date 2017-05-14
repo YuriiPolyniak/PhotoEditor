@@ -2,57 +2,87 @@ package com.project.yura.photoeditor;
 
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.project.yura.photoeditor.Model.CustomFilters;
+import com.project.yura.photoeditor.Model.IFilter;
 import com.project.yura.photoeditor.Model.PreviewData;
 
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomViewHolder> {
-    private LayoutInflater mInflater;
-    private List<PreviewData> previewDataList;
-    private Context mContext;
+class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomViewHolder> {
+    private final LayoutInflater mInflater;
+    private final List<PreviewData> previewDataList;
+    private final Context mContext;
     Drawable foreground;
-    View.OnClickListener externalListener = null;
-    int selectedItemId = -1;
+    private View.OnClickListener externalListener = null;
+   // private View.OnLongClickListener externalLongListener = null;
+    private int selectedItemId = -1;
+    private PreviewData newFilterPreviewData;
 
-    public class CustomViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public ImageView foregroundImageView;
-        public ImageView likeImageView;
-        public TextView nameView;
+    static final String NEW_FILTER = "NEW FILTER";
 
-        public CustomViewHolder(View view) {
+    class CustomViewHolder extends RecyclerView.ViewHolder {
+        final ImageView imageView;
+        final ImageView foregroundImageView;
+        final ImageView likeImageView;
+        final ImageView newImageView;
+        final TextView nameView;
+
+        CustomViewHolder(View view) {
             super(view);
             imageView = (ImageView) view.findViewById(R.id.preview_image);
             nameView = (TextView) view.findViewById(R.id.preview_title);
             foregroundImageView = (ImageView) view.findViewById(R.id.foreground_image);
             likeImageView = (ImageView) view.findViewById(R.id.like_image);
+            newImageView = (ImageView) view.findViewById(R.id.new_image);
         }
     }
 
-    public PreviewAdapter(Context context, List<PreviewData> previewDataList, View.OnClickListener listener) {
+    public PreviewAdapter(Context context, List<PreviewData> previewDataList, View.OnClickListener listener,
+                          boolean haveNewOption) {
+        if (haveNewOption) {
+            newFilterPreviewData = new PreviewData(
+                    BitmapFactory.decodeResource(context.getResources(), R.drawable.new_filter),
+                    new IFilter() {
+                        @Override
+                        public String getName() {
+                            return NEW_FILTER;
+                        }
+
+                        @Override
+                        public Bitmap applyFilter(Bitmap image, int weight) {
+                            return null;
+                        }
+
+                        @Override
+                        public boolean hasWeight() {
+                            return false;
+                        }
+                    },
+                    false,
+                    false
+            );
+            previewDataList.add(0, newFilterPreviewData);
+        }
+
         sortPreviewData(previewDataList);
 
         this.previewDataList = previewDataList;
         this.mContext = context;
         mInflater = LayoutInflater.from(context);
         externalListener = listener;
-
+       // externalLongListener = longListener;
         //foreground = new ColorDrawable(0x7F14CFE5);
     }
 
@@ -62,9 +92,8 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
         //View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.preview_item, null);
         View view = mInflater.inflate(R.layout.preview_item, viewGroup, false);
         view.setOnClickListener(customOnItemClickListener);
-
-        CustomViewHolder viewHolder = new CustomViewHolder(view);
-        return viewHolder;
+        view.setOnLongClickListener(customOnItemLongClickListener);
+        return new CustomViewHolder(view);
     }
 
     final private View.OnClickListener customOnItemClickListener = new View.OnClickListener() {
@@ -72,8 +101,7 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
         public void onClick(View v) {
             //save id of selected filter
             PreviewData selectedFilter = (PreviewData) v.getTag();
-            int id = previewDataList.indexOf(selectedFilter);
-            selectedItemId = id;
+            selectedItemId = previewDataList.indexOf(selectedFilter);
 
             //refresh view
             notifyDataSetChanged();
@@ -84,6 +112,33 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
             if (externalListener != null)
                 externalListener.onClick(v);
 
+        }
+    };
+
+    final private View.OnLongClickListener customOnItemLongClickListener = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            //save id of selected filter
+            PreviewData selectedFilter = (PreviewData) v.getTag();
+            int currentIndex = previewDataList.indexOf(selectedFilter);
+            if (currentIndex != selectedItemId) {
+                v.performClick();
+            }
+            //refresh view
+            //notifyDataSetChanged();
+
+            //String title = selectedFilter.getFilter().getName();
+
+            if (selectedFilter.getIsCustom()) {
+                //externalLongListener.onLongClick(v);
+                if (mContext instanceof IUpdateFilter) {
+                    ((IUpdateFilter) mContext).deleteFilter(selectedFilter);
+                }
+            }
+
+            //notifyDataSetChanged();
+
+            return true;
         }
     };
 
@@ -102,9 +157,20 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
             customViewHolder.likeImageView.setVisibility(View.INVISIBLE);
         }
 
+        if (previewItem.getIsCustom()) {
+            customViewHolder.newImageView.setVisibility(View.VISIBLE);
+        } else {
+            customViewHolder.newImageView.setVisibility(View.INVISIBLE);
+        }
+
         if (i == selectedItemId) {
             customViewHolder.nameView.setBackgroundResource(R.color.selectedItem);
-            customViewHolder.foregroundImageView.setVisibility(View.VISIBLE);
+//            if (previewItem.getFilter().getName().equals(NEW_FILTER)) {
+            if (previewItem.equals(newFilterPreviewData)) {
+                customViewHolder.foregroundImageView.setVisibility(View.INVISIBLE);
+            } else {
+                customViewHolder.foregroundImageView.setVisibility(View.VISIBLE);
+            }
         } else {
             customViewHolder.nameView.setBackgroundResource(R.color.lightOrange);
             customViewHolder.foregroundImageView.setVisibility(View.INVISIBLE);
@@ -116,7 +182,8 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
         return (null != previewDataList ? previewDataList.size() : 0);
     }
 
-    public int changeFavorite(String name, boolean mode) {
+    public int changeFavorite(PreviewData filter, boolean mode) {
+//        public int changeFavorite(String name, boolean mode) {
 //        PreviewData data = null;
 //        for (int i = 0; i < previewDataList.size(); i++) {
 //            data = previewDataList.get(i);
@@ -127,7 +194,10 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
 //            }
 //        }
 //        previewDataList.add(0, data);
-        PreviewData data = null;
+
+        filter.setIsLiked(mode);
+
+        /*PreviewData data = null;
         for (int i = 0; i < previewDataList.size(); i++) {
             data = previewDataList.get(i);
             if (data.getFilter().getName().equals(name)) {
@@ -136,28 +206,63 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
 
                 break;
             }
-        }
-//        previewDataList.add(0, data);
+        }*/
+
+        //PreviewData selectedFilter = filter;//previewDataList.get(selectedItemId);
 
         sortPreviewData(previewDataList);
 
-        for (int i = 0; i < previewDataList.size(); i++) {
+        selectedItemId = previewDataList.indexOf(filter);
+        /*for (int i = 0; i < previewDataList.size(); i++) {
             data = previewDataList.get(i);
             if (data.getFilter().getName().equals(name)) {
                 selectedItemId = i;
 
                 break;
             }
-        }
-        //selectedItemId = 0;
+        }*/
+
         notifyDataSetChanged();
         return selectedItemId;
+    }
+
+    public void removeFilter(PreviewData filter) {
+        previewDataList.remove(filter);
+        //selectedItemId = -1;
+        View view = new View(mContext);
+        view.setTag(previewDataList.get(selectedItemId));
+        if (externalListener != null)
+            externalListener.onClick(view);
+        notifyDataSetChanged();
     }
 
     private void sortPreviewData(List<PreviewData> data) {
         Collections.sort( data, new Comparator<PreviewData>() {
             @Override
             public int compare(PreviewData o1, PreviewData o2) {
+                /*if (o1.getFilter().getName().equals(NEW_FILTER)) {
+                    return -1;
+                }
+                if (o2.getFilter().getName().equals(NEW_FILTER)) {
+                    return 1;
+                }*/
+
+                //preview for new filter first
+                if (o1.equals(newFilterPreviewData)) {
+                    return -1;
+                }
+                if (o2.equals(newFilterPreviewData)) {
+                    return 1;
+                }
+
+                //then custom filters
+                if (o1.getIsCustom() && !o2.getIsCustom()) {
+                    return -1;
+                }
+                if (!o1.getIsCustom() && o2.getIsCustom()) {
+                    return 1;
+                }
+
                 if (o1.getIsLiked() == o2.getIsLiked()) {
                     return o1.getFilter().getName().compareTo(o2.getFilter().getName());
                 }
@@ -168,5 +273,9 @@ public class PreviewAdapter extends RecyclerView.Adapter<PreviewAdapter.CustomVi
                 }
             }
         });
+    }
+
+    public interface IUpdateFilter {
+        void deleteFilter(PreviewData data);
     }
 }

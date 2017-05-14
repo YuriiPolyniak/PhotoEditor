@@ -14,6 +14,8 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
+import java.net.InetAddress;
+
 public class Helper {
 
     public static String getRealPathFromURI(Uri contentUri, ContentResolver contentResolver) {
@@ -96,8 +98,8 @@ public class Helper {
         return null;
     }
 
-    public static String getDataColumn(Context context, Uri uri, String selection,
-                                       String[] selectionArgs) {
+    private static String getDataColumn(Context context, Uri uri, String selection,
+                                        String[] selectionArgs) {
 
         Cursor cursor = null;
         final String column = "_data";
@@ -124,7 +126,7 @@ public class Helper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
-    public static boolean isExternalStorageDocument(Uri uri) {
+    private static boolean isExternalStorageDocument(Uri uri) {
         return "com.android.externalstorage.documents".equals(uri.getAuthority());
     }
 
@@ -132,7 +134,7 @@ public class Helper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
-    public static boolean isDownloadsDocument(Uri uri) {
+    private static boolean isDownloadsDocument(Uri uri) {
         return "com.android.providers.downloads.documents".equals(uri.getAuthority());
     }
 
@@ -140,7 +142,7 @@ public class Helper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
-    public static boolean isMediaDocument(Uri uri) {
+    private static boolean isMediaDocument(Uri uri) {
         return "com.android.providers.media.documents".equals(uri.getAuthority());
     }
 
@@ -148,7 +150,7 @@ public class Helper {
      * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
-    public static boolean isGooglePhotosUri(Uri uri) {
+    private static boolean isGooglePhotosUri(Uri uri) {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
@@ -209,5 +211,28 @@ public class Helper {
             installed = false;
         }
         return installed;
+    }
+
+    public static boolean verificateApp(Context context, String packageName){
+        boolean installed = false;
+
+        try {
+            ApplicationInfo info = context.getPackageManager().getApplicationInfo(packageName, 0);
+            installed = true;
+        } catch (PackageManager.NameNotFoundException e) {
+            installed = false;
+        }
+        return installed;
+    }
+
+    public static boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+            return !ipAddr.equals("");
+
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 }

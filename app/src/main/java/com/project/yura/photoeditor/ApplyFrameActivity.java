@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.AutoTransition;
-import android.transition.TransitionManager;
-import android.transition.TransitionSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -93,7 +90,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
         IFilter[] filters = customFilters.GetFilters();
         for (IFilter f : filters) {
             previews.add(new PreviewData(
-                    f.applyFilter(previewBitmap, weight), f , false));
+                    f.applyFilter(previewBitmap, weight), f , false, false));
         }
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.preview_recycler);
@@ -101,14 +98,14 @@ public class ApplyFrameActivity    extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
 
-        PreviewAdapter adapter = new PreviewAdapter(this, previews, onItemSelectListener );
+        PreviewAdapter adapter = new PreviewAdapter(this, previews, onItemSelectListener, false);
         recyclerView.setAdapter(adapter);
 
     }
 
 
     // show image without change (and hide)
-    public void previewClick(View view) {
+    void previewClick(View view) {
         if (editedBitmap != null) {
             if (displayOriginal) {
                 imageView.setImageBitmap(editedBitmap);
@@ -123,7 +120,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
     }
 
     // hide action bar
-    public void resizeClick(View view) {
+    void resizeClick(View view) {
 //        TransitionSet transitionSet = new TransitionSet();
 //        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
 //        transitionSet.addTransition(new AutoTransition());
@@ -163,7 +160,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
         onBackPressed();
     }
 
-    private View.OnClickListener onItemSelectListener = new View.OnClickListener() {
+    View.OnClickListener onItemSelectListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             seekBar.setVisibility(View.VISIBLE);
@@ -186,7 +183,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
     };
 
 
-    private void applyFilter() {
+    void applyFilter() {
         editedBitmap = selectedFilter.getFilter().applyFilter(
                 scaledOriginalBitmap,
                 seekBar.getProgress());

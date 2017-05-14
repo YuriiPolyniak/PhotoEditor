@@ -10,16 +10,16 @@ import android.widget.ImageView;
 
 
 public class ImageViewOnTouchListener implements View.OnTouchListener{
-    Matrix matrix = new Matrix();
-    Matrix savedMatrix = new Matrix();
-    PointF start = new PointF();
-    Object mode;
-    float oldDist;
-    PointF mid = new PointF();
+    private Matrix matrix = new Matrix();
+    private Matrix savedMatrix = new Matrix();
+    private PointF start = new PointF();
+    private Object mode;
+    private float oldDist;
+    private PointF mid = new PointF();
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        // TODO scrollable imageView
+        // TODO scrollable imageView (don't care any more)
         ImageView view = (ImageView) v;
         view.setScaleType(ImageView.ScaleType.MATRIX);
         float scale;
@@ -27,7 +27,7 @@ public class ImageViewOnTouchListener implements View.OnTouchListener{
         //dumpEvent(event);
         // Handle touch events here...
 
-        switch (event.getAction() & event.ACTION_MASK)
+        switch (event.getAction() & MotionEvent.ACTION_MASK)
         {
             case MotionEvent.ACTION_DOWN:   // first finger down only
                 savedMatrix.set(matrix);

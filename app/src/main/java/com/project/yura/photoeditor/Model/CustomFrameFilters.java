@@ -5,22 +5,22 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
-import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.util.Log;
 
 import com.project.yura.photoeditor.R;
 
 public class CustomFrameFilters extends BaseFilter {
     private Context context = null;
-    public Bitmap pattern1;
-    public Bitmap pattern2;
+    private final Bitmap pattern1;
+    private final Bitmap pattern2;
+    private final Bitmap pattern3;
 
     public CustomFrameFilters(Context context) {
         this.context = context;
         pattern1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.grunge_frame_1);
         pattern2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.grunge_frame_2);
+        pattern3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.grunge_frame_3);
     }
 
     public IFilter[] GetFilters() {
@@ -29,14 +29,16 @@ public class CustomFrameFilters extends BaseFilter {
             new FrameFilter2(),
             new FrameFilter3(),
             new FrameFilter4(),
+            new FrameFilter5(),
+            new FrameFilter6(),
             //new CustomFilter(),
         };
 
         return frameFilters;
     }
 
-    public class FrameFilter1 implements IFilter {
-        private String name = "Black 1";
+    private class FrameFilter1 implements IFilter {
+        private final String name = "Black 1";
 
         @Override
         public String getName() {
@@ -75,8 +77,8 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    public class FrameFilter2 implements IFilter {
-        private String name = "White 1";
+    private class FrameFilter2 implements IFilter {
+        private final String name = "White 1";
 
         @Override
         public String getName() {
@@ -123,8 +125,8 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    public class FrameFilter3 implements IFilter {
-        private String name = "Black 2";
+    private class FrameFilter3 implements IFilter {
+        private final String name = "Black 2";
 
         @Override
         public String getName() {
@@ -162,8 +164,8 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    public class FrameFilter4 implements IFilter {
-        private String name = "White 2";
+    private class FrameFilter4 implements IFilter {
+        private final String name = "White 2";
 
         @Override
         public String getName() {
@@ -180,6 +182,94 @@ public class CustomFrameFilters extends BaseFilter {
                 overlay = Bitmap.createScaledBitmap(pattern2, image.getHeight(), image.getWidth(), true);
             } else {
                 overlay = Bitmap.createScaledBitmap(pattern2, image.getWidth(), image.getHeight(), true);
+            }
+
+            overlay = Bitmap.createBitmap(overlay, 0, 0,
+                    overlay.getWidth(),
+                    overlay.getHeight(), m, true);
+
+            ColorMatrix overlayColorMatrix = new ColorMatrix();
+            overlayColorMatrix.set(new float[]{
+                    1, 0, 0, 0, 255,
+                    0, 1, 0, 0, 255,
+                    0, 0, 1, 0, 255,
+                    0, 0, 0, 1, 0
+            });
+
+            Bitmap overlay1 = applyColorMatrix(overlay, overlayColorMatrix);
+            Bitmap bmOverlay = Bitmap.createBitmap(image.getWidth(), image.getHeight(), image.getConfig());
+
+
+            Canvas canvas = new Canvas(bmOverlay);
+            canvas.drawBitmap(image, new Matrix(), null);
+            canvas.drawBitmap(overlay1, 0,0, null);
+
+            return bmOverlay;
+        }
+
+        @Override
+        public boolean hasWeight() {
+            return false;
+        }
+    }
+
+    private class FrameFilter5 implements IFilter {
+        private final String name = "Black 3";
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public Bitmap applyFilter(Bitmap image, int weight) {
+            Matrix m = new Matrix();
+
+            Bitmap overlay;
+            if (image.getHeight() > image.getWidth()) {
+                m.postRotate(90);
+                overlay = Bitmap.createScaledBitmap(pattern3, image.getHeight(), image.getWidth(), true);
+            } else {
+                overlay = Bitmap.createScaledBitmap(pattern3, image.getWidth(), image.getHeight(), true);
+            }
+
+            overlay = Bitmap.createBitmap(overlay, 0, 0,
+                    overlay.getWidth(),
+                    overlay.getHeight(), m, true);
+
+            Bitmap bmOverlay = Bitmap.createBitmap(image.getWidth(), image.getHeight(), image.getConfig());
+
+            Canvas canvas = new Canvas(bmOverlay);
+            canvas.drawBitmap(image, new Matrix(), null);
+            canvas.drawBitmap(overlay, 0,0, null);
+
+            return bmOverlay;
+        }
+
+        @Override
+        public boolean hasWeight() {
+            return false;
+        }
+    }
+
+    private class FrameFilter6 implements IFilter {
+        private final String name = "White 3";
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public Bitmap applyFilter(Bitmap image, int weight) {
+            Matrix m = new Matrix();
+
+            Bitmap overlay;
+            if (image.getHeight() > image.getWidth()) {
+                m.postRotate(90);
+                overlay = Bitmap.createScaledBitmap(pattern3, image.getHeight(), image.getWidth(), true);
+            } else {
+                overlay = Bitmap.createScaledBitmap(pattern3, image.getWidth(), image.getHeight(), true);
             }
 
             overlay = Bitmap.createBitmap(overlay, 0, 0,
@@ -212,7 +302,7 @@ public class CustomFrameFilters extends BaseFilter {
     }
 
     public class CustomFilter implements IFilter {
-        private String name = "Circle";
+        private final String name = "Circle";
 
         @Override
         public String getName() {

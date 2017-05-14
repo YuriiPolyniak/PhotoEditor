@@ -1,6 +1,5 @@
 package com.project.yura.photoeditor;
 
-import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -9,9 +8,8 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
-import com.facebook.FacebookSdk;
-import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
@@ -25,8 +23,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SaveActivity extends AppCompatActivity {
-    CurrentSession currentSession;
-    File imageToSave;
+    private CurrentSession currentSession;
+    private File imageToSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +59,10 @@ public class SaveActivity extends AppCompatActivity {
             e.printStackTrace();
         } finally {
             try {
-                fos.flush();
-                fos.close();
+                if (fos != null) {
+                    fos.flush();
+                    fos.close();
+                }
 
                 Helper.refreshGallery(this, Uri.fromFile(imageToSave));
             } catch (IOException e) {
@@ -87,7 +87,16 @@ public class SaveActivity extends AppCompatActivity {
     }
 
     public void shareFacebook(View view) {
-
+        String appName = "Facebook";
+        if (!Helper.verificateApp(this, "com.facebook.katana")) {
+            Toast.makeText(this, "Sharing images through " + appName
+                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (!Helper.isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
         SharePhoto photo = new SharePhoto.Builder()
                 .setBitmap(currentSession.currentBitmap)
                 .build();
@@ -122,34 +131,90 @@ public class SaveActivity extends AppCompatActivity {
     }
 
     public void shareVK(View view) {
+        String appName = "VK";
+        String packageName= "com.vkontakte.android";
+
+        if (!Helper.verificateApp(this, packageName)) {
+            Toast.makeText(this, "Sharing images through " + appName
+                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!Helper.isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("image/*");
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage("com.vkontakte.android");
+        i.setPackage(packageName);
         startActivity(i);
     }
 
     public void shareViber(View view) {
+        String appName = "Viber";
+        String packageName = "com.viber.voip";
+
+        if (!Helper.verificateApp(this, packageName)) {
+            Toast.makeText(this, "Sharing images through " + appName
+                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!Helper.isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("image/*");
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage("com.viber.voip");
+        i.setPackage(packageName);
         startActivity(i);
     }
 
     public void shareInstagram(View view) {
+        String appName = "Instagram";
+        String packageName = "com.instagram.android";
+
+        if (!Helper.verificateApp(this, packageName)) {
+            Toast.makeText(this, "Sharing images through " + appName
+                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!Helper.isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("image/*");
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage("com.instagram.android");
+        i.setPackage(packageName);
         startActivity(i);
     }
 
     public void shareTwitter(View view) {
+        String appName = "Twitter";
+        String packageName = "com.twitter.android";
+
+        if (!Helper.verificateApp(this, packageName)) {
+            Toast.makeText(this, "Sharing images through " + appName
+                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (!Helper.isInternetAvailable()) {
+            Toast.makeText(this, "No internet connection", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("image/*");
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage("com.twitter.android");
+        i.setPackage(packageName);
         startActivity(i);
     }
 }

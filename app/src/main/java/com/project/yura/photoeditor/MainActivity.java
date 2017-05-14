@@ -1,26 +1,16 @@
 package com.project.yura.photoeditor;
 
-import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.project.yura.photoeditor.Model.Helper;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -28,8 +18,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-    private int PICK_IMAGE_REQUEST = 1;
-    private int CAMERA_IMAGE_REQUEST = 2;
+    private final int PICK_IMAGE_REQUEST = 1;
+    private final int CAMERA_IMAGE_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

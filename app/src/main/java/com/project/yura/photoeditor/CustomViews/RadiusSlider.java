@@ -16,9 +16,9 @@ import com.flask.colorpicker.slider.AbsCustomSlider;
 public class RadiusSlider extends AbsCustomSlider {
 
     private int color = Color.BLACK;
-    private Paint barPaint = PaintBuilder.newPaint().build();
-    private Paint solid = PaintBuilder.newPaint().build();
-    private Paint clearingStroke;
+    private final Paint barPaint = PaintBuilder.newPaint().build();
+    private final Paint solid = PaintBuilder.newPaint().build();
+    private final Paint clearingStroke;
     private ColorPickerView colorPicker;
 
     public RadiusSlider(Context context) {
