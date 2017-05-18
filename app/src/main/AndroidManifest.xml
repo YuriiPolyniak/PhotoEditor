@@ -41,7 +41,7 @@
         <activity android:name=".ApplyAdjustActivity" />
         <activity android:name=".ApplyFilterActivity" />
         <activity android:name=".SaveActivity" />
-        <activity android:name=".NewFilterActivity"></activity>
+        <activity android:name=".NewFilterActivity" />
     </application>
 
 </manifest>

@@ -231,7 +231,7 @@ public class Helper {
             return !ipAddr.equals("");
 
         } catch (Exception e) {
-            return false;
+            return true;
         }
 
     }
