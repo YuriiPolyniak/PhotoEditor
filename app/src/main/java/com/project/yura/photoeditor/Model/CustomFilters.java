@@ -96,7 +96,7 @@ public class CustomFilters extends BaseFilter{
 
     //region Filters
 
-    private class GrayScaleFilter implements IFilter {
+    public class GrayScaleFilter implements IFilter {
         private final String name = "GrayScale";
 
         @Override
@@ -127,7 +127,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class PolaroidFilter implements IFilter {
+    public class PolaroidFilter implements IFilter {
         private final String name = "Polaroid";
 
         @Override
@@ -165,7 +165,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class InverseFilter implements IFilter {
+    public class InverseFilter implements IFilter {
         private final String name = "Inverse";
 
         @Override
@@ -194,7 +194,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class SepiaFilter implements IFilter {
+    public class SepiaFilter implements IFilter {
         private final String name = "Sepia";
 
         @Override
@@ -235,7 +235,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class Sepia1Filter implements IFilter {
+    public class Sepia1Filter implements IFilter {
         private final String name = "Sepia1";
 
         @Override
@@ -263,7 +263,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class BlackAndWhiteFilter implements IFilter {
+    public class BlackAndWhiteFilter implements IFilter {
         private final String name = "B & W";
 
         @Override
@@ -296,7 +296,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class BlurFilter implements IFilter {
+    public class BlurFilter implements IFilter {
         private final String name = "Blur";
 
         @Override
@@ -339,7 +339,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class EmbossFilter implements IFilter {
+    public class EmbossFilter implements IFilter {
         private final String name = "Emboss";
 
         @Override
@@ -388,7 +388,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class SharpenFilter implements IFilter {
+    public class SharpenFilter implements IFilter {
         private final String name = "Sharpen";
 
         @Override
@@ -437,7 +437,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class EdgeEnhanceFilter implements IFilter {
+    public class EdgeEnhanceFilter implements IFilter {
         private final String name = "Edge";
 
         @Override
@@ -486,7 +486,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class GaussianBlurFilter implements IFilter {
+    public class GaussianBlurFilter implements IFilter {
         private final String name = "Gauss";
 
         @Override
@@ -607,7 +607,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class My2GrayScaleFilter implements IFilter {
+    public class My2GrayScaleFilter implements IFilter {
         private final String name = "GrayScale2";
 
         @Override
@@ -694,7 +694,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class MyBlackAndWhiteFilter implements IFilter {
+    public class MyBlackAndWhiteFilter implements IFilter {
         private final String name = "B & W 2";
 
         @Override
@@ -802,7 +802,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class SaturationFilter implements IFilter {
+    public class SaturationFilter implements IFilter {
         private final String name = "SATURATION(not)";
 
         @Override
@@ -1009,7 +1009,7 @@ public class CustomFilters extends BaseFilter{
         }
     }
 
-    private class OverlayFilter implements IFilter {
+    public class OverlayFilter implements IFilter {
         private final String name = "Old";
         private final Bitmap pattern;
 
