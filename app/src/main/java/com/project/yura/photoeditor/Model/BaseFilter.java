@@ -7,9 +7,9 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.util.Log;
 
-abstract class BaseFilter {
+public abstract class BaseFilter {
 
-    Bitmap applyColorMatrix(Bitmap image, ColorMatrix matrix) {
+    public Bitmap applyColorMatrix(Bitmap image, ColorMatrix matrix) {
         long startTime = System.currentTimeMillis();
 
         Bitmap bitmap = Bitmap.createBitmap(image.getWidth(),

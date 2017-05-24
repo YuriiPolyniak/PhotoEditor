@@ -87,7 +87,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
 
         int weight = 50;
         previews = new ArrayList<>();
-        IFilter[] filters = customFilters.GetFilters();
+        IFilter[] filters = customFilters.getFilters();
         for (IFilter f : filters) {
             previews.add(new PreviewData(
                     f.applyFilter(previewBitmap, weight), f , false, false));

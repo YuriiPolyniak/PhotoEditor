@@ -1,6 +1,6 @@
 package com.project.yura.photoeditor.Model;
 
-class CustomArray {
+public class CustomArray {
     public int[] array;
     private int width;
     private int height;
@@ -11,11 +11,11 @@ class CustomArray {
         this.height = height;
     }
 
-    int IJ(int i, int j) {
+    public int IJ(int i, int j) {
         return array[i * width + j];
     }
 
-    void IJ(int i, int j, int value) {
+    public void IJ(int i, int j, int value) {
         array[i * width + j] = value;
     }
 }

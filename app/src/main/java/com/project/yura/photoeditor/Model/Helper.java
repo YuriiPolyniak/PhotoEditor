@@ -172,10 +172,10 @@ public class Helper {
         if (!fill) {
             int maxNew = Math.max(newHeight, newWidth);
             if (bitmapRatio > 1) {
-                width = maxNew;
+                width = maxNew;//newWidth
                 height = (int) (maxNew / bitmapRatio);
             } else {
-                height = maxNew;
+                height = maxNew;//newHeight
                 width = (int) (maxNew * bitmapRatio);
             }
             return Bitmap.createScaledBitmap(image, width, height, true);

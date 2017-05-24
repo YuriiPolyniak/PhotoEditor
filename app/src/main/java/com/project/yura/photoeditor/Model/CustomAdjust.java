@@ -7,7 +7,7 @@ import android.graphics.ColorMatrix;
 import android.util.Log;
 
 public class CustomAdjust extends BaseFilter {
-    private Context context = null;
+   // private Context context = null;
 
     public enum AdjustType {
         BRIGHT,

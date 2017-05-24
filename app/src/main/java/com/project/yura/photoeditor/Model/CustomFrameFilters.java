@@ -23,7 +23,7 @@ public class CustomFrameFilters extends BaseFilter {
         pattern3 = BitmapFactory.decodeResource(context.getResources(), R.drawable.grunge_frame_3);
     }
 
-    public IFilter[] GetFilters() {
+    public IFilter[] getFilters() {
         IFilter[] frameFilters = new IFilter[]{
             new FrameFilter1(),
             new FrameFilter2(),
@@ -37,7 +37,7 @@ public class CustomFrameFilters extends BaseFilter {
         return frameFilters;
     }
 
-    private class FrameFilter1 implements IFilter {
+    public class FrameFilter1 implements IFilter {
         private final String name = "Black 1";
 
         @Override
@@ -77,7 +77,7 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    private class FrameFilter2 implements IFilter {
+    public class FrameFilter2 implements IFilter {
         private final String name = "White 1";
 
         @Override
@@ -125,7 +125,7 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    private class FrameFilter3 implements IFilter {
+    public class FrameFilter3 implements IFilter {
         private final String name = "Black 2";
 
         @Override
@@ -164,7 +164,7 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    private class FrameFilter4 implements IFilter {
+    public class FrameFilter4 implements IFilter {
         private final String name = "White 2";
 
         @Override
@@ -213,7 +213,7 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    private class FrameFilter5 implements IFilter {
+    public class FrameFilter5 implements IFilter {
         private final String name = "Black 3";
 
         @Override
@@ -252,7 +252,7 @@ public class CustomFrameFilters extends BaseFilter {
         }
     }
 
-    private class FrameFilter6 implements IFilter {
+    public class FrameFilter6 implements IFilter {
         private final String name = "White 3";
 
         @Override
