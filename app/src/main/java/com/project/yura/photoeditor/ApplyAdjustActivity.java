@@ -447,6 +447,7 @@ implements ColorPickerDialog.IUpdate {
         seekBarBalance.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
 
         seekBarBalance.setProgress(50);
+        seekBarBalance.setContentDescription(String.valueOf(color));
     }
 
     //endregion

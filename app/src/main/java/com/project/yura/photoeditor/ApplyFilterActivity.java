@@ -26,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.OnClick;
+
 public class ApplyFilterActivity extends AppCompatActivity
     implements PreviewAdapter.IUpdateFilter{
     private List<PreviewData> previews;
@@ -167,6 +169,7 @@ public class ApplyFilterActivity extends AppCompatActivity
     }
 
     // show image without change (and hide)
+    @OnClick(R.id.preview_button)
     void previewClick(View view) {
 
         if (editedBitmap != null) {
@@ -183,6 +186,7 @@ public class ApplyFilterActivity extends AppCompatActivity
     }
 
     // hide action bar
+    @OnClick(R.id.resize_button)
     void resizeClick(View view) {
 //        TransitionSet transitionSet = new TransitionSet();
 //        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);

@@ -30,7 +30,7 @@ tools:context="com.project.yura.photoeditor.ApplyFrameActivity">
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:background="@android:color/transparent"
-        android:onClick="previewClick"/>
+        />
     <ImageView
         android:id="@+id/resize_button"
         android:layout_width="@dimen/icon_button_size"
@@ -39,7 +39,7 @@ tools:context="com.project.yura.photoeditor.ApplyFrameActivity">
         android:src="@drawable/resize_small"
         android:layout_alignParentEnd="true"
         android:background="@android:color/transparent"
-        android:onClick="resizeClick" />
+         />
 
 </RelativeLayout>
 <LinearLayout
@@ -83,6 +83,7 @@ tools:context="com.project.yura.photoeditor.ApplyFrameActivity">
             style="@style/AppTheme.HeadLine"
             android:text="frame"/>
         <ImageView
+            android:id="@+id/cancel_button"
             android:layout_centerVertical="true"
             android:layout_width="56dp"
             android:layout_height="wrap_content"
@@ -91,6 +92,7 @@ tools:context="com.project.yura.photoeditor.ApplyFrameActivity">
             android:src="@drawable/cancel_icon"
             android:onClick="returnBack"/>
         <ImageView
+            android:id="@+id/ok_button"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_width="56dp"

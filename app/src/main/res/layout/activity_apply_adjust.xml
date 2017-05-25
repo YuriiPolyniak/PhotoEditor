@@ -20,7 +20,8 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter" />
+            android:scaleType="fitCenter"
+            android:layout_alignParentBottom="true" />
 
         <ImageView
             android:id="@+id/preview_button"
@@ -128,37 +129,37 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
 
     <LinearLayout
         android:id="@+id/layout_to_hide"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <SeekBar
             android:id="@+id/seek_bar"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="2dp"
             android:max="100"
             android:progress="50"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:visibility="gone" />
 
         <SeekBar
             android:id="@+id/seek_bar_balance"
-            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="2dp"
             android:max="100"
             android:progress="50"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp" />
+            android:visibility="gone" />
 
         <LinearLayout
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:orientation="horizontal">
 
@@ -169,12 +170,12 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
                 <ImageView
                     android:id="@+id/adjust_icon"
                     style="@style/AppTheme.ElementIcon"
-                    android:src="@drawable/adjust_bright_icon"/>
+                    android:src="@drawable/adjust_bright_icon" />
 
                 <TextView
                     android:id="@+id/adjust_text"
                     style="@style/AppTheme.AdjustElementDescription"
-                    android:text="Bright"/>
+                    android:text="Bright" />
 
             </LinearLayout>
 
@@ -185,12 +186,12 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
                 <ImageView
                     android:id="@id/adjust_icon"
                     style="@style/AppTheme.ElementIcon"
-                    android:src="@drawable/adjust_contrast_icon"/>
+                    android:src="@drawable/adjust_contrast_icon" />
 
                 <TextView
                     android:id="@id/adjust_text"
                     style="@style/AppTheme.AdjustElementDescription"
-                    android:text="Contrast"/>
+                    android:text="Contrast" />
 
             </LinearLayout>
 
@@ -201,12 +202,12 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
                 <ImageView
                     android:id="@id/adjust_icon"
                     style="@style/AppTheme.ElementIcon"
-                    android:src="@drawable/adjust_balance_icon"/>
+                    android:src="@drawable/adjust_balance_icon" />
 
                 <TextView
                     android:id="@id/adjust_text"
                     style="@style/AppTheme.AdjustElementDescription"
-                    android:text="Balance"/>
+                    android:text="Balance" />
 
             </LinearLayout>
 
@@ -217,12 +218,12 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
                 <ImageView
                     android:id="@id/adjust_icon"
                     style="@style/AppTheme.ElementIcon"
-                    android:src="@drawable/adjust_black_white_icon"/>
+                    android:src="@drawable/adjust_black_white_icon" />
 
                 <TextView
                     android:id="@id/adjust_text"
                     style="@style/AppTheme.AdjustElementDescription"
-                    android:text="Saturation"/>
+                    android:text="Saturation" />
 
             </LinearLayout>
 
@@ -233,50 +234,52 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
                 <ImageView
                     android:id="@id/adjust_icon"
                     style="@style/AppTheme.ElementIcon"
-                    android:src="@drawable/adjust_crop_icon"/>
+                    android:src="@drawable/adjust_crop_icon" />
 
                 <TextView
                     android:id="@id/adjust_text"
                     style="@style/AppTheme.AdjustElementDescription"
-                    android:text="Crop"/>
+                    android:text="Crop" />
 
             </LinearLayout>
 
         </LinearLayout>
 
         <LinearLayout
-            android:layout_height="@dimen/tab_bar_border"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_bar_border"
             android:background="@color/colorText"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
 
         <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="@dimen/tab_bar_height"
-            android:background="@color/colorAccent"
-            android:layout_width="match_parent">
+            android:background="@color/colorAccent">
 
             <TextView
                 style="@style/AppTheme.HeadLine"
-                android:text="adjust"/>
+                android:text="adjust" />
 
             <ImageView
-                android:layout_centerVertical="true"
+                android:id="@+id/cancel_button"
                 android:layout_width="56dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="18dp"
+                android:layout_centerVertical="true"
+                android:onClick="returnBack"
                 android:paddingEnd="18dp"
-                android:src="@drawable/cancel_icon"
-                android:onClick="returnBack"/>
+                android:paddingStart="18dp"
+                android:src="@drawable/cancel_icon" />
 
             <ImageView
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
+                android:id="@+id/ok_button"
                 android:layout_width="56dp"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:onClick="saveResult"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
-                android:src="@drawable/ok_icon"
-                android:onClick="saveResult"/>
+                android:src="@drawable/ok_icon" />
 
         </RelativeLayout>
 

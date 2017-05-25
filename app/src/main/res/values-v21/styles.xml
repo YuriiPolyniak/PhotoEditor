@@ -6,6 +6,10 @@
         <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
     </style>
 
+    <style name="AppTheme.Splash" parent="AppTheme.Transparent">
+        <item name="android:windowBackground">@drawable/back</item>
+    </style>
+
     <style name="AppTheme.ShareIcon" parent="AppTheme">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">0dp</item>

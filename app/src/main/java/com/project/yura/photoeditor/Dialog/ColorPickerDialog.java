@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -118,9 +119,12 @@ public class ColorPickerDialog extends DialogFragment {
 
         hsv[0] = HSL_Helper.getHueForPosition(HSL_Helper.ColorPosition.LEFT, centerHue, hsvRadius);
         leftPreview.setImageDrawable(drawCircle(getActivity(), size, size, Color.HSVToColor(hsv)));
-
+        leftPreview.setContentDescription(String.valueOf(Color.HSVToColor(hsv)));
+        Log.d("COLOR Left", String.valueOf(Color.HSVToColor(hsv)));
         hsv[0] = HSL_Helper.getHueForPosition(HSL_Helper.ColorPosition.RIGHT, centerHue, hsvRadius);
         rightPreview.setImageDrawable(drawCircle(getActivity(), size, size, Color.HSVToColor(hsv)));
+        rightPreview.setContentDescription(String.valueOf(Color.HSVToColor(hsv)));
+        Log.d("COLOR Right", String.valueOf(Color.HSVToColor(hsv)));
 
        /* Color.colorToHSV(color, hsv);
         centerHue = hsv[0];

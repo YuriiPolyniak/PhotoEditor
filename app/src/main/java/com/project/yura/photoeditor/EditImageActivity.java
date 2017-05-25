@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -43,9 +44,11 @@ public class EditImageActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         currentSession = CurrentSession.GetInstance();
-
-        String pathString = getIntent().getExtras().getString(IMAGE_TO_EDIT_URI);
-        currentSession.path = pathString;
+        String pathString = null;
+        if (getIntent().getExtras() != null) {
+            pathString = getIntent().getExtras().getString(IMAGE_TO_EDIT_URI);
+            currentSession.path = pathString;
+        }
        // String realPath = null;
         if (pathString != null && !Objects.equals(pathString, "")) {
             Uri imageUri = Uri.parse(pathString);
@@ -99,6 +102,18 @@ public class EditImageActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        } else {
+            currentSession.path = pathString;
+            currentSession.currentBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.back);
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+            currentSession.currentBitmap = Helper.ResizeBitmap(
+                    currentSession.currentBitmap,
+                    displayMetrics.widthPixels,
+                    displayMetrics.heightPixels, false);
+            originalBitmap = currentSession.currentBitmap;
         }
 
         //previewButton = (ImageView) findViewById(R.id.preview_button);

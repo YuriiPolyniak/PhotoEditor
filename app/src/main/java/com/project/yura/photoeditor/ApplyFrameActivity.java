@@ -22,6 +22,9 @@ import com.project.yura.photoeditor.Model.PreviewData;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class ApplyFrameActivity    extends AppCompatActivity {
 
     private List<PreviewData> previews;
@@ -45,6 +48,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_frame);
 
+        ButterKnife.bind(this);
         currentSession = CurrentSession.GetInstance();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -105,6 +109,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
 
 
     // show image without change (and hide)
+    @OnClick(R.id.preview_button)
     void previewClick(View view) {
         if (editedBitmap != null) {
             if (displayOriginal) {
@@ -120,6 +125,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
     }
 
     // hide action bar
+    @OnClick(R.id.resize_button)
     void resizeClick(View view) {
 //        TransitionSet transitionSet = new TransitionSet();
 //        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
