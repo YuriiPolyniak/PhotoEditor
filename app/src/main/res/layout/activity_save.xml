@@ -8,32 +8,37 @@
         android:background="@color/colorPrimary"
         android:orientation="vertical"
         tools:context="com.project.yura.photoeditor.SaveActivity">
+
     <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="@dimen/tab_bar_height"
-        android:background="@color/colorAccent"
-        android:layout_width="match_parent">
+        android:background="@color/colorAccent">
+
         <TextView
             style="@style/AppTheme.HeadLine"
-            android:textAllCaps="false"
-            android:text="Save &amp; Share"/>
+            android:text="Save &amp; Share"
+            android:textAllCaps="false" />
+
         <ImageView
-            android:layout_centerVertical="true"
             android:layout_width="56dp"
-            android:layout_height="wrap_content"
-            android:paddingStart="18dp"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:onClick="returnBack"
             android:paddingEnd="18dp"
-            android:src="@drawable/back_arrow_button"
-            android:onClick="returnBack"/>
+            android:paddingStart="18dp"
+            android:src="@drawable/back_arrow_button" />
+
         <ImageView
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
             android:layout_width="56dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="goHome"
             android:paddingEnd="14dp"
             android:paddingStart="14dp"
             android:src="@drawable/home_button"
-            android:onClick="goHome"/>
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_height="@dimen/tab_bar_border"
         android:layout_width="match_parent"

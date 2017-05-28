@@ -143,21 +143,20 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
                 android:id="@+id/cancel_button"
                 android:layout_centerVertical="true"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:src="@drawable/cancel_icon"
                 />
             <ImageView
                 android:id="@+id/ok_button"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
                 android:src="@drawable/ok_icon"
-                 />
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true" />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

@@ -56,6 +56,19 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
             custom:cropAutoZoomEnabled="true"
             app:cropScaleType="fitCenter" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                style="@style/AppTheme"
+                tools:visibility="visible"/>
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/resize_button"
             android:layout_width="@dimen/icon_button_size"
@@ -143,7 +156,8 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
             android:layout_marginTop="2dp"
             android:max="100"
             android:progress="50"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
         <SeekBar
             android:id="@+id/seek_bar_balance"
@@ -263,7 +277,7 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
             <ImageView
                 android:id="@+id/cancel_button"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
                 android:onClick="returnBack"
                 android:paddingEnd="18dp"
@@ -273,13 +287,13 @@ tools:context="com.project.yura.photoeditor.ApplyAdjustActivity">
             <ImageView
                 android:id="@+id/ok_button"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_height="match_parent"
                 android:onClick="saveResult"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
-                android:src="@drawable/ok_icon" />
+                android:src="@drawable/ok_icon"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
 

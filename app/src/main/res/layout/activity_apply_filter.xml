@@ -22,16 +22,27 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                style="@style/AppTheme"/>
+        </LinearLayout>
+
         <ImageView
             android:id="@+id/preview_button"
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginBottom="6dp"
             android:background="@android:color/transparent"
             android:padding="@dimen/icon_button_margin"
-            android:src="@drawable/preview_button_dark" />
+            android:src="@drawable/preview_button_dark"
+            android:layout_alignTop="@+id/like_button"
+            android:layout_alignParentEnd="true" />
 
         <ImageView
             android:id="@+id/resize_button"
@@ -50,7 +61,7 @@
             android:layout_alignParentStart="true"
             android:layout_marginBottom="6dp"
             android:background="@android:color/transparent"
-            android:onClick="likeClick"
+
             android:padding="@dimen/icon_button_margin"
             android:src="@drawable/like_disabled"
             android:visibility="invisible" />
@@ -100,21 +111,21 @@
                 android:id="@id/cancel_button"
                 android:layout_centerVertical="true"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingStart="18dp"
                 android:paddingEnd="18dp"
                 android:src="@drawable/cancel_icon"
-                android:onClick="returnBack"/>
+                />
             <ImageView
                 android:id="@+id/ok_button"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_width="56dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
                 android:src="@drawable/ok_icon"
-                android:onClick="saveResult"/>
+                />
         </RelativeLayout>
     </LinearLayout>
 </LinearLayout>

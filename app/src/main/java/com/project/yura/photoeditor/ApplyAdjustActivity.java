@@ -3,12 +3,14 @@ package com.project.yura.photoeditor;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -45,10 +47,11 @@ implements ColorPickerDialog.IUpdate {
     @BindView(R.id.layout_to_hide) ViewGroup barToHide;
     @BindView(R.id.seek_bar) SeekBar seekBar;
     @BindView(R.id.seek_bar_balance) SeekBar seekBarBalance;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
 
     //@BindView(R.id.activity_apply_adjust) LinearLayout workspaceLayout;
     @BindView(R.id.crop_image_view) CropImageView cropImageView;
-
 
     private boolean displayOriginal;
     //endregion
@@ -90,11 +93,29 @@ implements ColorPickerDialog.IUpdate {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                startImageProcessing();
                 adjustParameters.update(adjustCurrentType, seekBar.getProgress());
                 if (displayOriginal) {
                     previewClick(null);
                 }
-                applyFilter(false);
+
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        applyFilter(false);
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+
+                        imageView.setImageBitmap(editedBitmap);
+                        stopImageProcessing();
+                    }
+                };
+                task.execute();
+
             }
         });
 
@@ -111,11 +132,31 @@ implements ColorPickerDialog.IUpdate {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                startImageProcessing();
                 adjustParameters.update(adjustCurrentType, seekBar.getProgress());
                 if (displayOriginal) {
                     previewClick(null);
                 }
-                applyFilter(true);
+
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+
+                    @Override
+                    protected Void doInBackground(Void... params) {
+                        applyFilter(true);
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+
+                        imageView.setImageBitmap(editedBitmap);
+                        stopImageProcessing();
+                    }
+                };
+                task.execute();
+                //applyFilter(true);
             }
         });
 
@@ -159,13 +200,6 @@ implements ColorPickerDialog.IUpdate {
     // hide action bar
     @OnClick(R.id.resize_button)
     void resizeClick(View view) {
-//        TransitionSet transitionSet = new TransitionSet();
-//        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
-//        transitionSet.addTransition(new AutoTransition());
-//
-//        TransitionManager.beginDelayedTransition(workspaceLayout, transitionSet);
-
-
         if (barToHide.getVisibility() == View.VISIBLE) {
             barToHide.setVisibility(View.GONE);
             resizeButton.setImageResource(R.drawable.resize_big);
@@ -190,23 +224,6 @@ implements ColorPickerDialog.IUpdate {
                 adjustParameters.get(adjustCurrentType,
                         CustomAdjust.AdjustTypeParameter.RADIUS));
         dialog.show(getFragmentManager(), "");
-//        final AlertDialog dialog = new AlertDialog.Builder(this)
-//                .setTitle("Choose color")
-//                .setView(getLayoutInflater().inflate(R.layout.dialog_color_picker, null))
-//                //.setView(R.layout.dialog_color_picker)
-//                .setPositiveButton("OK", null)
-//                .setNegativeButton("CANCEL", null)
-//                .create();
-//        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-//            @Override
-//            public void onShow(DialogInterface arg) {
-//                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-//                        .setTextColor(getResources().getColor(R.color.darkOrange));
-//                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-//                        .setTextColor(getResources().getColor(R.color.colorText));
-//            }
-//        });
-//        dialog.show();
     }
 
     @OnClick(R.id.bright_adjust_select)
@@ -261,6 +278,24 @@ implements ColorPickerDialog.IUpdate {
     //endregion
 
     //region Additional methods
+    private void startImageProcessing() {
+        seekBar.setEnabled(false);
+        seekBarBalance.setEnabled(false);
+        colorPickerButton.setEnabled(false);
+        rotateLeftButton.setEnabled(false);
+        rotateRightButton.setEnabled(false);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopImageProcessing() {
+        seekBar.setEnabled(true);
+        seekBarBalance.setEnabled(true);
+        colorPickerButton.setEnabled(true);
+        rotateLeftButton.setEnabled(true);
+        rotateRightButton.setEnabled(true);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
     public void returnBack(View view) {
         onBackPressed();
     }
@@ -421,16 +456,8 @@ implements ColorPickerDialog.IUpdate {
             //balanceEditedBitmap = editedBitmap;
         }
 
-        /* //old version (working)
-        if (balance) {
-            editedBitmap = customAdjust.AdjustBalance(scaledOriginalBitmap, adjustParameters);
-        } else {
-            editedBitmap = customAdjust.AdjustBrightness(scaledOriginalBitmap, adjustParameters);
-            editedBitmap = customAdjust.AdjustContrast(editedBitmap, adjustParameters);
-            editedBitmap = customAdjust.AdjustSaturation(editedBitmap, adjustParameters);
-        }*/
-
-        imageView.setImageBitmap(editedBitmap);
+        //removed to asyncTask
+        //imageView.setImageBitmap(editedBitmap);
     }
 
     //endregion

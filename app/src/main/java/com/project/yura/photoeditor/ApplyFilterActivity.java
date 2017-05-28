@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import com.project.yura.photoeditor.Model.CurrentSession;
@@ -26,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ApplyFilterActivity extends AppCompatActivity
@@ -36,12 +40,16 @@ public class ApplyFilterActivity extends AppCompatActivity
     private Bitmap scaledOriginalBitmap = null;
     private Bitmap realEditedBitmap = null;
     private CurrentSession currentSession;
-    private ImageView imageView;
-    private ImageView previewButton;
-    private ImageView resizeButton;
-    private ImageView likeButton;
-    private SeekBar seekBar;
-    private ViewGroup barToHide;
+
+
+    @BindView(R.id.imageToEdit) ImageView imageView;
+    @BindView(R.id.preview_button) ImageView previewButton;
+    @BindView(R.id.resize_button) ImageView resizeButton;
+    @BindView(R.id.like_button) ImageView likeButton;
+    @BindView(R.id.layout_to_hide) ViewGroup barToHide;
+    @BindView(R.id.seek_bar) SeekBar seekBar;
+    @BindView(R.id.progress_bar) ProgressBar mProgressBar;
+
     private PreviewAdapter adapter;
     private RecyclerView recyclerView;
     //private LinearLayout workspaceLayout;
@@ -59,6 +67,8 @@ public class ApplyFilterActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_apply_filter);
 
+        ButterKnife.bind(this);
+
         currentSession = CurrentSession.GetInstance();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -67,14 +77,8 @@ public class ApplyFilterActivity extends AppCompatActivity
         scaledOriginalBitmap = currentSession.currentBitmap;/*Helper.ResizeBitmap(
                 currentSession.currentBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels, false);*/
         editedBitmap = scaledOriginalBitmap; //currentSession.currentBitmap;
-        imageView = (ImageView)findViewById(R.id.imageToEdit);
+
         imageView.setImageBitmap(scaledOriginalBitmap); //currentSession.currentBitmap
-        previewButton = (ImageView)findViewById(R.id.preview_button);
-        resizeButton = (ImageView)findViewById(R.id.resize_button);
-        likeButton = (ImageView)findViewById(R.id.like_button);
-        barToHide = (ViewGroup)findViewById(R.id.layout_to_hide);
-        //workspaceLayout = (LinearLayout) findViewById(R.id.activity_apply_filter);
-        seekBar = (SeekBar)findViewById(R.id.seek_bar);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -117,32 +121,6 @@ public class ApplyFilterActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
-
-
-        /*
-        //moved to onResume
-        adapter = new PreviewAdapter(this, previews, onItemSelectListener, true);
-        recyclerView.setAdapter(adapter);
-*/
-
-//        //old recycler
-//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.preview_recycler);
-//        recyclerView.setHasFixedSize(true);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        recyclerView.setLayoutManager(layoutManager);
-//
-//        PreviewAdapter adapter = new PreviewAdapter(this, previews, onItemSelectListener );
-//        recyclerView.setAdapter(adapter);
-
-        //old onItemSelectListener
-        /*recyclerView.  setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UserData selectedUser = (UserData) parent.getItemAtPosition(position);
-                Toast.makeText(getApplicationContext(), "You select " + selectedUser.getName(),
-                        Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
     }
 
@@ -214,10 +192,24 @@ public class ApplyFilterActivity extends AppCompatActivity
         }
     }
 
+    private void startImageProcessing() {
+        seekBar.setEnabled(false);
+        recyclerView.setEnabled(false);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopImageProcessing() {
+        seekBar.setEnabled(true);
+        recyclerView.setEnabled(true);
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.cancel_button)
     public void returnBack(View view) {
         onBackPressed();
     }
 
+    @OnClick(R.id.ok_button)
     public void saveResult(View view) {
         if (editedBitmap != null) {
             currentSession.currentBitmap = editedBitmap; //TODO return updated original image (don't think this is important)
@@ -277,16 +269,36 @@ public class ApplyFilterActivity extends AppCompatActivity
 
 
     void applyFilter() {
-        editedBitmap = selectedFilter.getFilter().applyFilter(
-                scaledOriginalBitmap, //currentSession.currentBitmap,
-                seekBar.getProgress());
+        startImageProcessing();
+        final int progress = seekBar.getProgress();
         if (displayOriginal) {
             previewClick(null);
-        } else {
+        } /*else {
             imageView.setImageBitmap(editedBitmap);
-        }
+        }*/
+
+        AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                editedBitmap = selectedFilter.getFilter().applyFilter(
+                        scaledOriginalBitmap, //currentSession.currentBitmap,
+                        progress);
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+
+                imageView.setImageBitmap(editedBitmap);
+                stopImageProcessing();
+            }
+        };
+        task.execute();
     }
 
+    @OnClick(R.id.like_button)
     public void likeClick(View view) {
         if (!displayLiked) {
             likeButton.setImageResource(R.drawable.like_enabled);
