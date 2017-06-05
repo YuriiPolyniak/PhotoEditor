@@ -187,6 +187,7 @@ public class ApplyFilterActivity extends AppCompatActivity
             //Intent intent = new Intent(this, EditImageActivity.class);
             //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             //startActivity(intent);
+            overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
         } else {
             resizeClick(resizeButton);
         }
@@ -245,9 +246,9 @@ public class ApplyFilterActivity extends AppCompatActivity
 
                 //TODO decide what to do with like on your own filters
                 //cant like custom filters, they terrible
-                if (selectedFilter.getIsCustom()) {
+                /*if (selectedFilter.getIsCustom()) {
                     likeButton.setVisibility(View.GONE);
-                }
+                }*/
 
                 if (selectedFilter.getIsLiked()) {
                     likeButton.setImageResource(R.drawable.like_enabled);

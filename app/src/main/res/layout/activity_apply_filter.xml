@@ -26,23 +26,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true">
+
             <ProgressBar
                 android:id="@+id/progress_bar"
+                style="@style/AppTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                style="@style/AppTheme"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/preview_button"
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/like_button"
             android:background="@android:color/transparent"
             android:padding="@dimen/icon_button_margin"
-            android:src="@drawable/preview_button_dark"
-            android:layout_alignTop="@+id/like_button"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/preview_button_dark" />
 
         <ImageView
             android:id="@+id/resize_button"

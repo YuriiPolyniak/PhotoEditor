@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this, EditImageActivity.class);
             intent.putExtra(EditImageActivity.IMAGE_TO_EDIT_URI, mCapturedImageURI.toString());
             startActivity(intent);
-            
+            overridePendingTransition(R.anim.slide_right_to, R.anim.slide_right_from);
+
             /* old
             Uri uri = data.getData();
             Intent intent = new Intent(this, EditImageActivity.class);

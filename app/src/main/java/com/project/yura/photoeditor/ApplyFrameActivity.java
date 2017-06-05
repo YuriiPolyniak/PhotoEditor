@@ -147,6 +147,7 @@ public class ApplyFrameActivity    extends AppCompatActivity {
     public void onBackPressed() {
         if (barToHide.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
+            overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
         } else {
             resizeClick(resizeButton);
         }

@@ -74,6 +74,7 @@ public class SaveActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        overridePendingTransition(R.anim.slide_left_to, R.anim.slide_left_from);
     }
 
     public void returnBack(View view) {
@@ -84,6 +85,7 @@ public class SaveActivity extends AppCompatActivity {
         Intent home = new Intent(this, MainActivity.class);
         home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(home);
+        overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
     }
 
     public void shareFacebook(View view) {

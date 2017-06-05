@@ -116,59 +116,14 @@ public class EditImageActivity extends AppCompatActivity {
             originalBitmap = currentSession.currentBitmap;
         }
 
-        //previewButton = (ImageView) findViewById(R.id.preview_button);
-        //imageView = (ImageView) findViewById(R.id.imageToEdit);
         imageView.setImageBitmap(currentSession.currentBitmap);
 
-
-//        vScroll = (ScrollView) findViewById(R.id.vScroll);
-//        hScroll = (HorizontalScrollView) findViewById(R.id.hScroll);
     }
 
-//    @Override
-//    public void onWindowFocusChanged(boolean hasFocus) {
-//        super.onWindowFocusChanged(hasFocus);
-//
-//        ImageView imageView = (ImageView) findViewById(R.id.imageToEdit);
-//
-//        imageView.setScaleType(ImageView.ScaleType.MATRIX);
-//        Matrix m = new Matrix();
-//        int oldWidth = currentSession.currentBitmap.getWidth();
-//        int oldHeight = currentSession.currentBitmap.getHeight();
-//        /*LinearLayout shit = (LinearLayout)findViewById(R.id.shit);
-//        shit.measure(
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-//                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-//        shit.layout(0, 0,
-//                shit.getMeasuredWidth(),
-//                shit.getMeasuredHeight());*/
-////        int newWidth = imageView.getWidth();
-////        int newHeight = imageView.getHeight();
-//
-//        int newWidth = findViewById(R.id.vScroll).getWidth();
-//        int newHeight = findViewById(R.id.vScroll).getHeight();
-////        int newWidth3 = findViewById(R.id.hScroll).getWidth();
-////        int newHeight3 = findViewById(R.id.hScroll).getHeight();
-//        float bitmapRatio = (float) oldWidth / (float) oldHeight;
-//        float newBitmapRatio = (float) newWidth / (float) newHeight;
-//        float scale;
-//
-//        if (bitmapRatio > newBitmapRatio) {
-//            scale = (float) newWidth / (float) oldWidth;
-//        } else {
-//            scale = (float) newHeight / (float) oldHeight;
-//        }
-//        m.postScale(scale, scale, oldWidth / 2.0f, oldHeight / 2.0f);
-//
-////        imageView.setMaxWidth(newWidth);
-////        imageView.setMaxHeight(newHeight);
-//        imageView.setImageMatrix(m);
-//    }
 
+    //region onTouchEvent
     private float mx;
     private float my;
-   // ScrollView vScroll;
-   // HorizontalScrollView hScroll;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -201,20 +156,24 @@ public class EditImageActivity extends AppCompatActivity {
 
         return true;
     }
+    //endregion
 
     @OnClick(R.id.adjust_select)
     public void adjustSelect(View view) {
         startActivity(new Intent(this, ApplyAdjustActivity.class));
+        overridePendingTransition(R.anim.slide_up_to, R.anim.slide_up_from);
     }
 
     @OnClick(R.id.frame_select)
     public void frameSelect(View view) {
         startActivity(new Intent(this, ApplyFrameActivity.class));
+        overridePendingTransition(R.anim.slide_up_to, R.anim.slide_up_from);
     }
 
     @OnClick(R.id.filter_select)
     public void filterSelect(View view) {
         startActivity(new Intent(this, ApplyFilterActivity.class));
+        overridePendingTransition(R.anim.slide_up_to, R.anim.slide_up_from);
     }
 
     @Override
@@ -238,6 +197,7 @@ public class EditImageActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditImageActivity.super.onBackPressed();
+                overridePendingTransition(R.anim.slide_left_to, R.anim.slide_left_from);
             }
         })
         .create();
@@ -262,6 +222,7 @@ public class EditImageActivity extends AppCompatActivity {
     public void saveResult(View view) {
         Intent save = new Intent(this, SaveActivity.class);
         startActivity(save);
+        overridePendingTransition(R.anim.slide_right_to, R.anim.slide_right_from);
     }
 
     @OnClick(R.id.preview_button)
