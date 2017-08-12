@@ -9,4 +9,5 @@
     <dimen name="tab_bar_border">1px</dimen>
     <dimen name="preview_bar_height">96dp</dimen>
     <dimen name="radius_color_preview_size">48dp</dimen>
+    <dimen name="border_new_filter">10dp</dimen>
 </resources>

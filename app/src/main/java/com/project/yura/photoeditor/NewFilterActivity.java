@@ -202,6 +202,20 @@ public class NewFilterActivity extends AppCompatActivity
 
     }
 
+    @OnClick(R.id.help_button)
+    void onHelpClick() {
+        new AlertDialog.Builder(this)
+                .setTitle("New Filter")
+                .setMessage("Input the coefficients for new filter matrix. Each row will form the color component of new image, " +
+                        "each column determines how much of each old component was used:\n" +
+                        "1 - Red\n" +
+                        "2 - Green\n" +
+                        "3 - Blue\n" +
+                        "4 - Alpha")
+                .setPositiveButton("Ok", null)
+                .show();
+    }
+
     private void bindViews(){
         int rowCount = inputNumbers.getChildCount();
         int columnCount = ((ViewGroup) inputNumbers.getChildAt(0)).getChildCount();

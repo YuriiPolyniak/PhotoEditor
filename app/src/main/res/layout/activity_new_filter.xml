@@ -13,6 +13,7 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
         <ImageView
             android:layout_gravity="center"
             android:id="@+id/imageToEdit"
@@ -20,6 +21,7 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitCenter"/>
+
         <ImageView
             android:id="@+id/preview_button"
             android:layout_width="@dimen/icon_button_size"
@@ -29,8 +31,8 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
             android:src="@drawable/preview_button_dark"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-             />
+            android:background="@android:color/transparent"/>
+
         <ImageView
             android:id="@+id/reset_button"
             android:layout_width="@dimen/icon_button_size"
@@ -40,8 +42,8 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
             android:src="@drawable/reset_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:background="@android:color/transparent"
-             />
+            android:background="@android:color/transparent"/>
+
         <ImageView
             android:id="@+id/resize_button"
             android:layout_width="@dimen/icon_button_size"
@@ -49,70 +51,205 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
             android:padding="@dimen/icon_button_margin"
             android:src="@drawable/resize_small"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"
-              />
-
+            android:background="@android:color/transparent"/>
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/layout_to_hide"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TableLayout
-            android:id="@+id/input_numbers"
-            android:layout_height="wrap_content"
+
+        <FrameLayout
             android:layout_width="match_parent"
-            android:background="@color/colorPrimary" >
-            <TableRow>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-            </TableRow>
-            <TableRow>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-            </TableRow>
-            <TableRow>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-            </TableRow>
-            <TableRow>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-                <EditText
-                    style="@style/AppTheme.InputNewFilterElement"/>
-            </TableRow>
-        </TableLayout>
+            android:layout_height="match_parent">
+
+            <TableLayout
+                android:id="@+id/input_numbers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary">
+
+                <TableRow>
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/red" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/red" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/red"
+                        android:foreground="@drawable/border_blue" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/red" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/red" />
+                </TableRow>
+
+                <TableRow>
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/green" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/green" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/green" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/green" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/green" />
+                </TableRow>
+
+                <TableRow>
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/blue" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/blue" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/blue" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/blue" />
+
+                    <EditText
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@color/blue" />
+                </TableRow>
+
+                <TableRow>
+
+                    <EditText style="@style/AppTheme.InputNewFilterElement" />
+
+                    <EditText style="@style/AppTheme.InputNewFilterElement" />
+
+                    <EditText style="@style/AppTheme.InputNewFilterElement" />
+
+                    <EditText style="@style/AppTheme.InputNewFilterElement" />
+
+                    <EditText style="@style/AppTheme.InputNewFilterElement" />
+                </TableRow>
+            </TableLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <TableRow>
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_red" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_green" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_blue" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_alpha" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="#00000000" />
+                </TableRow>
+                <TableRow>
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_red" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_green" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_blue" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_alpha" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="#00000000" />
+                </TableRow>
+                <TableRow>
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_red" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_green" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_blue" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_alpha" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="#00000000" />
+                </TableRow>
+                <TableRow>
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_red" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_green" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_blue" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="@drawable/border_alpha" />
+
+                    <View
+                        style="@style/AppTheme.InputNewFilterElement"
+                        android:background="#00000000" />
+                </TableRow>
+
+
+            </TableLayout>
+        </FrameLayout>
         <!--<LinearLayout
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -128,35 +265,60 @@ tools:context="com.project.yura.photoeditor.NewFilterActivity">
             </GridView>
         </LinearLayout>-->
         <LinearLayout
-            android:layout_height="@dimen/tab_bar_border"
             android:layout_width="match_parent"
+            android:layout_height="@dimen/tab_bar_border"
             android:background="@color/colorText"
-            android:orientation="horizontal"/>
+            android:orientation="horizontal" />
+
         <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="@dimen/tab_bar_height"
-            android:background="@color/colorAccent"
-            android:layout_width="match_parent">
-            <TextView
-                style="@style/AppTheme.HeadLine"
-                android:text="new filter"/>
+            android:background="@color/colorAccent">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    style="@style/AppTheme.HeadLine"
+                    android:paddingLeft="8dp"
+                    android:text="new filter" />
+
+                <ImageView
+                    android:id="@+id/help_button"
+                    android:layout_width="36dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    android:src="@drawable/faq_button" />
+            </LinearLayout>
+
             <ImageView
                 android:id="@+id/cancel_button"
-                android:layout_centerVertical="true"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
-                android:paddingStart="18dp"
+                android:layout_centerVertical="true"
                 android:paddingEnd="18dp"
-                android:src="@drawable/cancel_icon"
-                />
+                android:paddingStart="18dp"
+                android:src="@drawable/cancel_icon" />
+
             <ImageView
                 android:id="@+id/ok_button"
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
-                android:src="@drawable/ok_icon"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true" />
+                android:src="@drawable/ok_icon" />
         </RelativeLayout>
     </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:focusable="true"/>
+
 </LinearLayout>

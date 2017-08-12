@@ -7,4 +7,8 @@
     <color name="lightOrange">#ED924E</color>
     <color name="darkOrange">#FF812F</color>
     <color name="selectedItem">#14CFE5</color>
+    <color name="red">@android:color/holo_red_light</color>
+    <color name="green">#ff99cc00</color>
+    <color name="alpha">#FFFFFF</color>
+    <color name="blue">@android:color/holo_blue_bright</color>
 </resources>
