@@ -24,10 +24,37 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ApplyAdjustActivity extends AppCompatActivity
-implements ColorPickerDialog.IUpdate {
+public class ApplyAdjustActivity extends BaseActivity
+        implements ColorPickerDialog.IUpdate {
 
-    //region Definitions
+    @BindView(R.id.imageToEdit)
+    ImageView imageView;
+    @BindView(R.id.preview_button)
+    ImageView previewButton;
+    @BindView(R.id.resize_button)
+    ImageView resizeButton;
+    @BindView(R.id.rotate_left_button)
+    ImageView rotateLeftButton;
+    @BindView(R.id.rotate_right_button)
+    ImageView rotateRightButton;
+    @BindView(R.id.color_picker_button)
+    ImageView colorPickerButton;
+    @BindView(R.id.layout_to_hide)
+    ViewGroup barToHide;
+    @BindView(R.id.seek_bar)
+    SeekBar seekBar;
+    @BindView(R.id.seek_bar_balance)
+    SeekBar seekBarBalance;
+    @BindView(R.id.progress_bar)
+    ProgressBar mProgressBar;
+
+    //@BindView(R.id.activity_apply_adjust) LinearLayout workspaceLayout;
+    @BindView(R.id.crop_image_view)
+    CropImageView cropImageView;
+
+    private boolean displayOriginal;
+    //endregion
+
     private Bitmap editedBitmap = null;
     private Bitmap balanceEditedBitmap = null;
     private Bitmap scaledOriginalBitmap = null;
@@ -39,31 +66,10 @@ implements ColorPickerDialog.IUpdate {
 
     private View lastSelectedView;
 
-    @BindView(R.id.imageToEdit) ImageView imageView;
-    @BindView(R.id.preview_button) ImageView previewButton;
-    @BindView(R.id.resize_button) ImageView resizeButton;
-    @BindView(R.id.rotate_left_button) ImageView rotateLeftButton;
-    @BindView(R.id.rotate_right_button) ImageView rotateRightButton;
-    @BindView(R.id.color_picker_button) ImageView colorPickerButton;
-    @BindView(R.id.layout_to_hide) ViewGroup barToHide;
-    @BindView(R.id.seek_bar) SeekBar seekBar;
-    @BindView(R.id.seek_bar_balance) SeekBar seekBarBalance;
-    @BindView(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
-    //@BindView(R.id.activity_apply_adjust) LinearLayout workspaceLayout;
-    @BindView(R.id.crop_image_view) CropImageView cropImageView;
-
-    private boolean displayOriginal;
-    //endregion
-
     //region Override methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply_adjust);
-
-        ButterKnife.bind(this);
 
         currentSession = CurrentSession.GetInstance();
 
@@ -75,11 +81,6 @@ implements ColorPickerDialog.IUpdate {
         editedBitmap = scaledOriginalBitmap; //currentSession.currentBitmap;
         //imageView = (ImageView)findViewById(R.id.imageToEdit);
         imageView.setImageBitmap(scaledOriginalBitmap); //currentSession.currentBitmap
-        //previewButton = (ImageView)findViewById(R.id.preview_button);
-        //resizeButton = (ImageView)findViewById(R.id.resize_button);
-        //barToHide = (ViewGroup)findViewById(R.id.layout_to_hide);
-        //workspaceLayout = (LinearLayout) findViewById(R.id.activity_apply_adjust);
-        //seekBar = (SeekBar)findViewById(R.id.seek_bar);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -139,7 +140,7 @@ implements ColorPickerDialog.IUpdate {
                     previewClick(null);
                 }
 
-                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+                AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 
                     @Override
                     protected Void doInBackground(Void... params) {
@@ -168,6 +169,11 @@ implements ColorPickerDialog.IUpdate {
         seekBarBalance.getThumb().setColorFilter(adjustParameters.get(CustomAdjust.AdjustType.BALANCE, CustomAdjust.AdjustTypeParameter.COLOR), PorterDuff.Mode.SRC_IN);
 
         cropImageView.setImageBitmap(editedBitmap);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_apply_adjust;
     }
 
     @Override
@@ -254,7 +260,7 @@ implements ColorPickerDialog.IUpdate {
     }
 
     @OnClick(R.id.rotate_left_button)
-    public void rotateLeft(View view){
+    public void rotateLeft(View view) {
         //cropImageView.rotateImage(90);
         Matrix m = new Matrix();
         m.postRotate(270);
@@ -266,8 +272,8 @@ implements ColorPickerDialog.IUpdate {
     }
 
     @OnClick(R.id.rotate_right_button)
-    public void rotateRight(View view){
-       //cropImageView.rotateImage(-90);
+    public void rotateRight(View view) {
+        //cropImageView.rotateImage(-90);
         Matrix m = new Matrix();
         m.postRotate(90);
 
@@ -324,7 +330,7 @@ implements ColorPickerDialog.IUpdate {
     void selectAdjust(CustomAdjust.AdjustType type, View view) {
         if (type == CustomAdjust.AdjustType.BALANCE) {
             seekBarBalance.setVisibility(View.VISIBLE);
-           // adjustParameters.update(type, 50);
+            // adjustParameters.update(type, 50);
             seekBarBalance.setProgress(adjustParameters.get(type));
             seekBar.setVisibility(View.GONE);
             colorPickerButton.setVisibility(View.VISIBLE);
@@ -386,8 +392,8 @@ implements ColorPickerDialog.IUpdate {
                     imageRes = R.drawable.adjust_crop_icon;
                     break;
             }
-            ((ImageView)(lastSelectedView.findViewById(R.id.adjust_icon))).setImageResource(imageRes);
-            ((TextView)(lastSelectedView.findViewById(R.id.adjust_text)))
+            ((ImageView) (lastSelectedView.findViewById(R.id.adjust_icon))).setImageResource(imageRes);
+            ((TextView) (lastSelectedView.findViewById(R.id.adjust_text)))
                     .setTextColor(getResources().getColor(R.color.darkOrange));
         }
 
@@ -412,14 +418,15 @@ implements ColorPickerDialog.IUpdate {
                     imageRes = R.drawable.adjust_selected_crop_icon;
                     break;
             }
-            ((ImageView)(lastSelectedView.findViewById(R.id.adjust_icon))).setImageResource(imageRes);
-            ((TextView)(lastSelectedView.findViewById(R.id.adjust_text)))
+            ((ImageView) (lastSelectedView.findViewById(R.id.adjust_icon))).setImageResource(imageRes);
+            ((TextView) (lastSelectedView.findViewById(R.id.adjust_text)))
                     .setTextColor(getResources().getColor(R.color.selectedItem));
         }
     }
 
     private boolean lastEditWasBalance = false;
     private int lastBalanceColor = 0;
+
     void applyFilter(boolean balance) {
         if (balance) {
             if (!lastEditWasBalance) {

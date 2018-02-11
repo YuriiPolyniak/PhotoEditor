@@ -27,10 +27,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class EditImageActivity extends AppCompatActivity {
+public class EditImageActivity extends BaseActivity {
     public static final String IMAGE_TO_EDIT_URI = "image_uri";
-    @BindView(R.id.imageToEdit) ImageView imageView;
-    @BindView(R.id.preview_button) ImageView previewButton;
+
+    @BindView(R.id.imageToEdit)
+    ImageView imageView;
+    @BindView(R.id.preview_button)
+    ImageView previewButton;
 
     private Bitmap originalBitmap;
     //Bitmap currentBitmap = null;
@@ -40,9 +43,6 @@ public class EditImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_image);
-
-        ButterKnife.bind(this);
 
         currentSession = CurrentSession.GetInstance();
         String pathString = null;
@@ -50,7 +50,7 @@ public class EditImageActivity extends AppCompatActivity {
             pathString = getIntent().getExtras().getString(IMAGE_TO_EDIT_URI);
             currentSession.path = pathString;
         }
-       // String realPath = null;
+        // String realPath = null;
         if (pathString != null && !Objects.equals(pathString, "")) {
             Uri imageUri = Uri.parse(pathString);
             try {
@@ -66,7 +66,7 @@ public class EditImageActivity extends AppCompatActivity {
             currentSession.realPath = path;
             //String path = imageUri.getPath();
             if (path != null) {
-            //if (pathString != null) {
+                //if (pathString != null) {
                 ExifInterface exif = null;
                 try {
                     exif = new ExifInterface(path);
@@ -75,10 +75,10 @@ public class EditImageActivity extends AppCompatActivity {
 
                     Matrix m = new Matrix();
                     switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_90 :
+                        case ExifInterface.ORIENTATION_ROTATE_90:
                             m.postRotate(90);
                             break;
-                        case ExifInterface.ORIENTATION_ROTATE_180 :
+                        case ExifInterface.ORIENTATION_ROTATE_180:
                             m.postRotate(180);
                             break;
                         case ExifInterface.ORIENTATION_ROTATE_270:
@@ -121,6 +121,10 @@ public class EditImageActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_edit_image;
+    }
 
     //region onTouchEvent
     private float mx;
@@ -181,7 +185,7 @@ public class EditImageActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         //imageView = (ImageView) findViewById(R.id.imageToEdit);
-        if (!displayOriginal){
+        if (!displayOriginal) {
             imageView.setImageBitmap(currentSession.currentBitmap);
         } else {
             previewClick();
@@ -191,17 +195,17 @@ public class EditImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         final AlertDialog dialog = new AlertDialog.Builder(this)
-        .setTitle("Exit?")
-        .setMessage("Exit editing this picture?")
-        .setNegativeButton("Cancel", null)
-        .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                EditImageActivity.super.onBackPressed();
-                overridePendingTransition(R.anim.slide_left_to, R.anim.slide_left_from);
-            }
-        })
-        .create();
+                .setTitle("Exit?")
+                .setMessage("Exit editing this picture?")
+                .setNegativeButton("Cancel", null)
+                .setPositiveButton("Exit", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditImageActivity.super.onBackPressed();
+                        overridePendingTransition(R.anim.slide_left_to, R.anim.slide_left_from);
+                    }
+                })
+                .create();
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface arg) {

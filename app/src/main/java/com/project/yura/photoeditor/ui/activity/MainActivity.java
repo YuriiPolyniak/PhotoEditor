@@ -18,44 +18,14 @@ import java.util.Date;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private final int PICK_IMAGE_REQUEST = 1;
     private final int CAMERA_IMAGE_REQUEST = 2;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        ButterKnife.bind(this);
-    }
-
-    //old version
-    /*
-    public void cameraClick(View view) {
-        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, CAMERA_IMAGE_REQUEST);
-    }*/
-
-
 
     private static Uri mCapturedImageURI;
 
     @OnClick(R.id.camera_button)
     public void cameraClick(View view) {
-        String fileName = "temp.jpg";
-
-       // String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-       // String imageFileName = "JPEG_" + timeStamp + "_.jpg";
-//        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
-
-        // mCurrentPhotoPath = image.getAbsolutePath();
-        ///////
 
         //camera stuff
         Intent imageIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
@@ -73,22 +43,7 @@ public class MainActivity extends AppCompatActivity {
         //imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriSavedImage);
         imageIntent.putExtra(MediaStore.EXTRA_OUTPUT, mCapturedImageURI);
         startActivityForResult(imageIntent, CAMERA_IMAGE_REQUEST);
-
-        /////////////
-//        //working camera intent
-//        ContentValues values = new ContentValues();
-//        values.put(MediaStore.Images.Media.TITLE, fileName);
-//        mCapturedImageURI = getContentResolver()
-//                .insert(
-//                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-//                        values);
-//        Intent intent = new Intent(
-//                MediaStore.ACTION_IMAGE_CAPTURE);
-//        intent.putExtra(MediaStore.EXTRA_OUTPUT,
-//                mCapturedImageURI);
-//        startActivityForResult(intent, CAMERA_IMAGE_REQUEST);
     }
-
 
     @OnClick(R.id.library_button)
     public void libraryClick(View view) {
@@ -110,55 +65,17 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
         if (requestCode == CAMERA_IMAGE_REQUEST && resultCode == RESULT_OK) {
-            //Bitmap picture = (Bitmap) data.getExtras().get("data");
-            //Object picture = data.getExtras().get("data");
-            //Bundle extras = data.getExtras();
-            //View back = findViewById(R.id.activity_main);
-            //back.setBackground(new BitmapDrawable(getResources(), picture));
-            //File picturesDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-
-/*
-            //mode = MODE_VIEWER;
-            String[] projection = { MediaStore.Images.Media.DATA };
-            //Cursor cursor = managedQuery(mCapturedImageURI, projection, null, null, null);
-            Cursor cursor = getContentResolver().query(mCapturedImageURI, projection, null, null, null);
-
-            int column_index_data = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-
-            //THIS IS WHAT YOU WANT!
-            String capturedImageFilePath = cursor.getString(column_index_data);
-
-            Bitmap bitmap = BitmapFactory.decodeFile(capturedImageFilePath);
-            View back = findViewById(R.id.activity_main);
-            back.setBackground(new BitmapDrawable(getResources(), bitmap));
-            */
-            //sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
-
-//            //good code
-//            Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-//            final Uri contentUri = mCapturedImageURI;
-//            scanIntent.setData(contentUri);
-//            sendBroadcast(scanIntent);
             Helper.refreshGallery(this, mCapturedImageURI);
 
             Intent intent = new Intent(this, EditImageActivity.class);
             intent.putExtra(EditImageActivity.IMAGE_TO_EDIT_URI, mCapturedImageURI.toString());
             startActivity(intent);
             overridePendingTransition(R.anim.slide_right_to, R.anim.slide_right_from);
-
-            /* old
-            Uri uri = data.getData();
-            Intent intent = new Intent(this, EditImageActivity.class);
-            intent.putExtra(EditImageActivity.IMAGE_TO_EDIT_URI, uri.toString());
-            startActivity(intent);
-            */
-
-//            Intent intent = new Intent(this, EditImageActivity.class);
-//            intent.putExtras(data.getExtras());
-//            startActivity(intent);
         }
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_main;
     }
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/activity_save"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/colorPrimary"
-        android:orientation="vertical"
-        tools:context="com.project.yura.photoeditor.ui.activity.SaveActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_save"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="com.project.yura.photoeditor.ui.activity.SaveActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,163 +16,156 @@
 
         <TextView
             style="@style/AppTheme.HeadLine"
-            android:text="Save &amp; Share"
+            android:text="@string/save_amp_share"
             android:textAllCaps="false" />
 
         <ImageView
+            android:id="@+id/save_back_button"
             android:layout_width="56dp"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:onClick="returnBack"
+            android:background="?selectableItemBackgroundBorderless"
             android:paddingEnd="18dp"
             android:paddingStart="18dp"
             android:src="@drawable/back_arrow_button" />
 
         <ImageView
+            android:id="@+id/save_home_button"
             android:layout_width="56dp"
             android:layout_height="match_parent"
-            android:onClick="goHome"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:paddingEnd="14dp"
             android:paddingStart="14dp"
-            android:src="@drawable/home_button"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true" />
+            android:src="@drawable/home_button" />
+
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_height="@dimen/tab_bar_border"
         android:layout_width="match_parent"
+        android:layout_height="@dimen/tab_bar_border"
         android:background="@color/colorText"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.7"
-        android:paddingTop="36dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="36dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="4dp"
-                android:src="@drawable/ok_icon"/>
+                android:src="@drawable/ok_icon" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@string/saved_successfully"
                 android:textColor="@color/colorText"
-                android:textSize="18sp"
-                android:text="Saved Successfully"/>
-        </LinearLayout>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorText"
-            android:textSize="20sp"
-            android:text="Next"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/colorText"
-            android:textSize="18sp"
-            android:text="Share on"/>
-    </LinearLayout>
-    <!--<GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:padding="12dp"
-        android:rowCount="2"
-        android:columnCount="3">
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_facebook"
-            android:onClick="shareFacebook"/>
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_vk"/>
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_instagram"/>
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_twitter"/>
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_viber"/>
-        <ImageView
-            style="@style/AppTheme.ShareIcon"
-            android:src="@drawable/share_somewhere"
-            android:onClick="shareSomewhere"/>
+                android:textSize="18sp" />
 
-    </GridLayout>-->
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/next"
+            android:textColor="@color/colorText"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/share_on"
+            android:textColor="@color/colorText"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="12dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="12dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:orientation="horizontal">
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_facebook_click"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareFacebook"
-                android:src="@drawable/share_facebook"/>
+                android:src="@drawable/share_facebook" />
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_vk_click"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareVK"
-                android:src="@drawable/share_vk"/>
+                android:src="@drawable/share_vk" />
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_instagram_click"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareInstagram"
-                android:src="@drawable/share_instagram"/>
+                android:src="@drawable/share_instagram" />
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1">
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_twitter_button"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareTwitter"
-                android:src="@drawable/share_twitter"/>
+                android:src="@drawable/share_twitter" />
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_viber_button"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareViber"
-                android:src="@drawable/share_viber"/>
+                android:src="@drawable/share_viber" />
+
             <ImageView
-                android:layout_height="match_parent"
+                android:id="@+id/save_other_button"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:padding="12dp"
-                android:onClick="shareSomewhere"
-                android:src="@drawable/share_somewhere"/>
+                android:src="@drawable/share_somewhere" />
+
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

@@ -4,5 +4,11 @@
     <string name="facebook_app_id">1285296258191279</string>
 
     <string name="toast_no_internet">No internet connection</string>
+    <string name="loading">Loading</string>
+    <string name="share_title">Share image using</string>
+    <string name="save_amp_share"><![CDATA[Save & Share]]></string>
+    <string name="saved_successfully">Saved Successfully</string>
+    <string name="next">Next</string>
+    <string name="share_on">Share on</string>
 
 </resources>

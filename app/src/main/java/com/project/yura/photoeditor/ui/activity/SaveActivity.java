@@ -25,24 +25,31 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.OnClick;
+
 import static com.project.yura.photoeditor.utils.PackageUtils.FACEBOOK_PACKAGE;
 import static com.project.yura.photoeditor.utils.PackageUtils.INSTAGRAM_PACKAGE;
 import static com.project.yura.photoeditor.utils.PackageUtils.TWITTER_PACKAGE;
 import static com.project.yura.photoeditor.utils.PackageUtils.VIBER_PACKAGE;
 import static com.project.yura.photoeditor.utils.PackageUtils.VK_PACKAGE;
 
-public class SaveActivity extends AppCompatActivity {
+public class SaveActivity extends BaseActivity {
+
     private CurrentSession currentSession;
     private File imageToSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_save);
 
         currentSession = CurrentSession.GetInstance();
 
         saveResult(currentSession.currentBitmap);
+    }
+
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_save;
     }
 
     private void saveResult(Bitmap currentBitmap) {
@@ -86,23 +93,26 @@ public class SaveActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_left_to, R.anim.slide_left_from);
     }
 
-    public void returnBack(View view) {
+    @OnClick(R.id.save_back_button)
+    public void returnBack() {
         onBackPressed();
     }
 
-    public void goHome(View view) {
+    @OnClick(R.id.save_home_button)
+    public void goHome() {
         Intent home = new Intent(this, MainActivity.class);
         home.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(home);
         overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
     }
 
-    public void shareFacebook(View view) {
+    @OnClick(R.id.save_facebook_click)
+    public void shareFacebook() {
         String appName = "Facebook";
 
         if (!PackageUtils.isAppInstalled(this, FACEBOOK_PACKAGE)) {
-            Toast.makeText(this, "Sharing images through " + appName
-                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+            showToast("Sharing images through " + appName
+                    + " requires install " + appName + " app");
             return;
         }
         if (!NetworkUtils.isNetworkAvailable(this)) {
@@ -118,36 +128,41 @@ public class SaveActivity extends AppCompatActivity {
 
         ShareDialog shareDialog = new ShareDialog(this);
         shareDialog.show(content, ShareDialog.Mode.AUTOMATIC);
-
-       /* ShareDialog shareDialog;
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        shareDialog = new ShareDialog(this);
-
-        ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                .setContentTitle("Title")
-                .setContentDescription(
-                        "\"Body Of Test Post\"")
-                .setContentUrl(Uri.parse("http://someurl.com/here"))
-                .build();
-
-        shareDialog.show(linkContent);*/
     }
 
-    public void shareSomewhere(View view) {
+    @OnClick(R.id.save_other_button)
+    public void shareSomewhere() {
         final Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("image/jpg");
-        //final File photoFile = new File(getFilesDir(), "foo.jpg");
-
         shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        startActivity(Intent.createChooser(shareIntent, "Share image using"));
+
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
     }
 
-    public void shareVK(View view) {
-        String appName = "VK";
+    @OnClick(R.id.save_vk_click)
+    public void shareVK() {
+        sharePhoto("VK", VK_PACKAGE);
+    }
 
-        if (!PackageUtils.isAppInstalled(this, VK_PACKAGE)) {
-            Toast.makeText(this, "Sharing images through " + appName
-                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
+    @OnClick(R.id.save_viber_button)
+    public void shareViber() {
+        sharePhoto("Viber", VIBER_PACKAGE);
+    }
+
+    @OnClick(R.id.save_instagram_click)
+    public void shareInstagram() {
+        sharePhoto("Instagram", INSTAGRAM_PACKAGE);
+    }
+
+    @OnClick(R.id.save_twitter_button)
+    public void shareTwitter() {
+        sharePhoto("Twitter", TWITTER_PACKAGE);
+    }
+
+    private void sharePhoto(String appName, String packageName) {
+        if (!PackageUtils.isAppInstalled(this, packageName)) {
+            showToast("Sharing images through " + appName
+                    + " requires install " + appName + " app");
             return;
         }
 
@@ -159,70 +174,7 @@ public class SaveActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("image/*");
         i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage(VK_PACKAGE);
-        startActivity(i);
-    }
-
-    public void shareViber(View view) {
-        String appName = "Viber";
-
-        if (!PackageUtils.isAppInstalled(this, VIBER_PACKAGE)) {
-            Toast.makeText(this, "Sharing images through " + appName
-                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("image/*");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage(VIBER_PACKAGE);
-        startActivity(i);
-    }
-
-    public void shareInstagram(View view) {
-        String appName = "Instagram";
-
-        if (!PackageUtils.isAppInstalled(this, INSTAGRAM_PACKAGE)) {
-            Toast.makeText(this, "Sharing images through " + appName
-                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("image/*");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage(INSTAGRAM_PACKAGE);
-        startActivity(i);
-    }
-
-    public void shareTwitter(View view) {
-        String appName = "Twitter";
-
-        if (!PackageUtils.isAppInstalled(this, TWITTER_PACKAGE )) {
-            Toast.makeText(this, "Sharing images through " + appName
-                    + " requires install " + appName + " app", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        if (!NetworkUtils.isNetworkAvailable(this)) {
-            Toast.makeText(this, R.string.toast_no_internet, Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("image/*");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(imageToSave));
-        i.setPackage(TWITTER_PACKAGE );
+        i.setPackage(packageName);
         startActivity(i);
     }
 }

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -19,22 +18,21 @@ import android.widget.SeekBar;
 
 import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.manager.CurrentSession;
-import com.project.yura.photoeditor.processing.CustomFilters;
-import com.project.yura.photoeditor.utils.Helper;
-import com.project.yura.photoeditor.processing.IFilter;
 import com.project.yura.photoeditor.manager.PreferencesHelper;
+import com.project.yura.photoeditor.processing.CustomFilters;
+import com.project.yura.photoeditor.processing.IFilter;
 import com.project.yura.photoeditor.processing.model.PreviewData;
 import com.project.yura.photoeditor.ui.adapter.PreviewAdapter;
+import com.project.yura.photoeditor.utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ApplyFilterActivity extends AppCompatActivity
+public class ApplyFilterActivity extends BaseActivity
         implements PreviewAdapter.IUpdateFilter {
     private List<PreviewData> previews;
     private PreviewData selectedFilter;
@@ -73,9 +71,6 @@ public class ApplyFilterActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply_filter);
-
-        ButterKnife.bind(this);
 
         currentSession = CurrentSession.GetInstance();
 
@@ -129,7 +124,11 @@ public class ApplyFilterActivity extends AppCompatActivity
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(layoutManager);
+    }
 
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_apply_filter;
     }
 
     @Override

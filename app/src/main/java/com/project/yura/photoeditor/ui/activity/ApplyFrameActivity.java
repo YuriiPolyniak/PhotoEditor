@@ -1,7 +1,6 @@
 package com.project.yura.photoeditor.ui.activity;
 
 import android.graphics.Bitmap;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,21 +12,20 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.processing.CustomFrameFilters;
-import com.project.yura.photoeditor.ui.adapter.PreviewAdapter;
-import com.project.yura.photoeditor.utils.Helper;
 import com.project.yura.photoeditor.processing.IFilter;
 import com.project.yura.photoeditor.processing.model.PreviewData;
-import com.project.yura.photoeditor.R;
+import com.project.yura.photoeditor.ui.adapter.PreviewAdapter;
+import com.project.yura.photoeditor.utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ApplyFrameActivity extends AppCompatActivity {
+public class ApplyFrameActivity extends BaseActivity {
 
     private List<PreviewData> previews;
     private PreviewData selectedFilter;
@@ -48,9 +46,7 @@ public class ApplyFrameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply_frame);
 
-        ButterKnife.bind(this);
         currentSession = CurrentSession.GetInstance();
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -109,6 +105,10 @@ public class ApplyFrameActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_apply_frame;
+    }
 
     // show image without change (and hide)
     @OnClick(R.id.preview_button)
@@ -190,7 +190,6 @@ public class ApplyFrameActivity extends AppCompatActivity {
             }
         }
     };
-
 
     void applyFilter() {
         editedBitmap = selectedFilter.getFilter().applyFilter(

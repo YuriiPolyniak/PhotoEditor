@@ -28,14 +28,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NewFilterActivity extends AppCompatActivity
-    implements SaveFilterDialog.ISaveFilter {
-    @BindView(R.id.imageToEdit) ImageView imageToEdit;
-    @BindView(R.id.preview_button) ImageView previewButton;
-    @BindView(R.id.resize_button) ImageView resizeButton;
-    @BindView(R.id.layout_to_hide) ViewGroup layoutToHide;
+public class NewFilterActivity extends BaseActivity
+        implements SaveFilterDialog.ISaveFilter {
+
+    @BindView(R.id.imageToEdit)
+    ImageView imageToEdit;
+    @BindView(R.id.preview_button)
+    ImageView previewButton;
+    @BindView(R.id.resize_button)
+    ImageView resizeButton;
+    @BindView(R.id.layout_to_hide)
+    ViewGroup layoutToHide;
     //@BindView(R.id.array_input_grid) GridView inputGrid;
-    @BindView(R.id.input_numbers) TableLayout inputNumbers;
+    @BindView(R.id.input_numbers)
+    TableLayout inputNumbers;
 
     private Bitmap editedBitmap = null;
     private CurrentSession currentSession;
@@ -50,9 +56,7 @@ public class NewFilterActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_filter);
 
-        ButterKnife.bind(this);
         currentSession = CurrentSession.GetInstance();
         editedBitmap = currentSession.currentBitmap;
 
@@ -68,8 +72,11 @@ public class NewFilterActivity extends AppCompatActivity
         bindViews();
 
         //resetClick();
+    }
 
-
+    @Override
+    protected int getLayoutResId() {
+        return R.layout.activity_new_filter;
     }
 
     @Override
@@ -124,7 +131,7 @@ public class NewFilterActivity extends AppCompatActivity
     public void saveFilter(String name) {
         floatInputElements = new float[inputElements.length];
         for (int i = 0; i < inputElements.length; i++) {
-            floatInputElements[i] = (float)inputElements[i];
+            floatInputElements[i] = (float) inputElements[i];
         }
         PreferencesHelper.getInstance().addCustomFilter(name, floatInputElements);
 
@@ -160,7 +167,7 @@ public class NewFilterActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.reset_button)
-    public void resetClick( ) {
+    public void resetClick() {
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Reset?")
                 .setMessage("Reset color correction matrix?")
@@ -217,7 +224,7 @@ public class NewFilterActivity extends AppCompatActivity
                 .show();
     }
 
-    private void bindViews(){
+    private void bindViews() {
         int rowCount = inputNumbers.getChildCount();
         int columnCount = ((ViewGroup) inputNumbers.getChildAt(0)).getChildCount();
         for (int i = 0; i < rowCount; i++) {
@@ -281,13 +288,13 @@ public class NewFilterActivity extends AppCompatActivity
                             !s.toString().equals("") &&
                             !s.toString().equals(",") &&
                             !s.toString().equals(".")
-                            ){
+                            ) {
                         inputEditTexts[currentIndex].setText("");
                         //applyMatrix();
                     }
                 }
                 double number = Math.max(Math.min(originalNumber, 99f), -99f);
-                number = ((int)(number * 100) / 100d);
+                number = ((int) (number * 100) / 100d);
 
                 //  || (originalNumber != 0 && !String.valueOf(originalNumber).equals(s.toString()))
                 if (Double.compare(number, originalNumber) != 0) {
@@ -312,7 +319,7 @@ public class NewFilterActivity extends AppCompatActivity
         }
     }
 
-    private void applyMatrix(){
+    private void applyMatrix() {
         Bitmap bitmap = Bitmap.createBitmap(currentSession.currentBitmap.getWidth(),
                 currentSession.currentBitmap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
@@ -320,7 +327,7 @@ public class NewFilterActivity extends AppCompatActivity
         Paint paint = new Paint();
         floatInputElements = new float[inputElements.length];
         for (int i = 0; i < inputElements.length; i++) {
-            floatInputElements[i] = (float)inputElements[i];
+            floatInputElements[i] = (float) inputElements[i];
         }
 
         ColorMatrix colorMatrix = new ColorMatrix(floatInputElements);
