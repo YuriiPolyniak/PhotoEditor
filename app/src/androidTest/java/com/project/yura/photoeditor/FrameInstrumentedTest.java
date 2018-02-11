@@ -6,8 +6,8 @@ import android.graphics.BitmapFactory;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.project.yura.photoeditor.Model.CustomFrameFilters;
-import com.project.yura.photoeditor.Model.IFilter;
+import com.project.yura.photoeditor.processing.CustomFrameFilters;
+import com.project.yura.photoeditor.processing.IFilter;
 
 import org.junit.*;
 import org.junit.runner.RunWith;

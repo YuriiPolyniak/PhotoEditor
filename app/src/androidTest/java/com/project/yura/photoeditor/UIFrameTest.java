@@ -2,6 +2,8 @@ package com.project.yura.photoeditor;
 
 import android.support.test.rule.ActivityTestRule;
 
+import com.project.yura.photoeditor.ui.activity.EditImageActivity;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

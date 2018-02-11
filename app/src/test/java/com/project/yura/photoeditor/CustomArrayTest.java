@@ -1,8 +1,6 @@
 package com.project.yura.photoeditor;
 
-import com.project.yura.photoeditor.Model.CustomArray;
-import com.project.yura.photoeditor.Model.CustomFilters;
-import com.project.yura.photoeditor.Model.IFilter;
+import com.project.yura.photoeditor.processing.model.CustomArray;
 
 import org.junit.Test;
 

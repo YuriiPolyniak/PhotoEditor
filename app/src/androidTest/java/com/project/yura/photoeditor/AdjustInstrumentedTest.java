@@ -3,7 +3,7 @@ package com.project.yura.photoeditor;
 import android.graphics.Bitmap;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.project.yura.photoeditor.Model.CustomAdjust;
+import com.project.yura.photoeditor.processing.model.CustomAdjust;
 
 import org.junit.Before;
 import org.junit.Test;

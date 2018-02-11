@@ -95,7 +95,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:max="100"/>-->
-    <com.project.yura.photoeditor.CustomViews.RadiusSlider
+    <com.project.yura.photoeditor.ui.view.RadiusSlider
         android:id="@+id/v_radius_slider"
         android:layout_width="match_parent"
         android:layout_marginTop="16dp"

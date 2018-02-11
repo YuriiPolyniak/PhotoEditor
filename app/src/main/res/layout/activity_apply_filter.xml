@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:orientation="vertical"
-    tools:context="com.project.yura.photoeditor.ApplyFilterActivity">
+    tools:context="com.project.yura.photoeditor.ui.activity.ApplyFilterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

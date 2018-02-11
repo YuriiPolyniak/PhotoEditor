@@ -1,20 +1,15 @@
 package com.project.yura.photoeditor;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.ColorMatrix;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.project.yura.photoeditor.Model.BaseFilter;
-import com.project.yura.photoeditor.Model.CustomFilters;
-import com.project.yura.photoeditor.Model.IFilter;
+import com.project.yura.photoeditor.processing.BaseFilter;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.R.attr.filter;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 

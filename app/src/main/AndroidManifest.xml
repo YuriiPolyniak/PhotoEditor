@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.project.yura.photoeditor">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -27,7 +28,7 @@
             android:authorities="com.facebook.app.FacebookContentProvider1285296258191279"
             android:exported="true" />
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".ui.activity.MainActivity"
             android:theme="@style/AppTheme.Splash">
 
             <intent-filter>
@@ -37,13 +38,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditImageActivity"
+            android:name=".ui.activity.EditImageActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ApplyFrameActivity" />
-        <activity android:name=".ApplyAdjustActivity" />
-        <activity android:name=".ApplyFilterActivity" />
-        <activity android:name=".SaveActivity" />
-        <activity android:name=".NewFilterActivity" />
+        <activity android:name=".ui.activity.ApplyFrameActivity" />
+        <activity android:name=".ui.activity.ApplyAdjustActivity" />
+        <activity android:name=".ui.activity.ApplyFilterActivity" />
+        <activity android:name=".ui.activity.SaveActivity" />
+        <activity android:name=".ui.activity.NewFilterActivity" />
     </application>
 
 </manifest>

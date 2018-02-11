@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/back"
-    tools:context="com.project.yura.photoeditor.MainActivity">
+    tools:context="com.project.yura.photoeditor.ui.activity.MainActivity">
 
     <ImageButton
         android:id="@+id/camera_button"

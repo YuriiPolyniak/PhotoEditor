@@ -2,4 +2,7 @@
     <string name="app_name">PhotoEditor</string>
     <string name="camera">Camera</string>
     <string name="facebook_app_id">1285296258191279</string>
+
+    <string name="toast_no_internet">No internet connection</string>
+
 </resources>

@@ -7,7 +7,7 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:background="@color/colorPrimaryDark"
 android:orientation="vertical"
-tools:context="com.project.yura.photoeditor.ApplyFrameActivity">
+tools:context="com.project.yura.photoeditor.ui.activity.ApplyFrameActivity">
 
 <RelativeLayout
     android:layout_width="match_parent"

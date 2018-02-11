@@ -1,14 +1,12 @@
 package com.project.yura.photoeditor;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import com.project.yura.photoeditor.Model.CustomFilters;
-import com.project.yura.photoeditor.Model.IFilter;
+import com.project.yura.photoeditor.processing.CustomFilters;
+import com.project.yura.photoeditor.processing.IFilter;
 
 import org.junit.Before;
 import org.junit.Test;
