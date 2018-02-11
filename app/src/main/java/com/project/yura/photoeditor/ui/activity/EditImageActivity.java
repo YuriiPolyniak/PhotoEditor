@@ -62,8 +62,12 @@ public class EditImageActivity extends BaseActivity {
             currentSession.currentBitmap = originalBitmap;
         }
 
+        loadImage(currentSession.currentBitmap);
+    }
+
+    private void loadImage(Bitmap bitmap) {
         Glide.with(this)
-                .load(currentSession.currentBitmap)
+                .load(bitmap)
                 .into(imageView);
     }
 
@@ -95,9 +99,7 @@ public class EditImageActivity extends BaseActivity {
         super.onResume();
 
         if (!displayOriginal) {
-            Glide.with(this)
-                    .load(currentSession.currentBitmap)
-                    .into(imageView);
+            loadImage(currentSession.currentBitmap);
         } else {
             previewClick();
         }
@@ -139,13 +141,11 @@ public class EditImageActivity extends BaseActivity {
     void previewClick() {
         if (currentSession.currentBitmap != null) {
             if (displayOriginal) {
-                Glide.with(this)
-                        .load(currentSession.currentBitmap)
-                        .into(imageView);
+                loadImage(currentSession.currentBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_dark);
                 displayOriginal = false;
             } else {
-                imageView.setImageBitmap(originalBitmap);//currentSession.currentBitmap);
+                loadImage(originalBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_light);
                 displayOriginal = true;
             }

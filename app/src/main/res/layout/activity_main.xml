@@ -4,16 +4,18 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/back"
+    android:orientation="vertical"
     tools:context="com.project.yura.photoeditor.ui.activity.MainActivity">
 
     <ImageButton
         android:id="@+id/camera_button"
         style="@style/AppTheme.MainPageButton"
         android:src="@drawable/camera_icon" />
+
     <ImageButton
         android:id="@+id/library_button"
         style="@style/AppTheme.MainPageButton"
         android:src="@drawable/library_icon" />
+
 </LinearLayout>

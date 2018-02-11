@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:id="@+id/activity_new_filter"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/colorPrimaryDark"
-android:orientation="vertical"
-tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_new_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="vertical"
+    tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -15,43 +15,44 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
         android:layout_weight="1">
 
         <ImageView
-            android:layout_gravity="center"
             android:id="@+id/imageToEdit"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:scaleType="fitCenter"/>
+            android:scaleType="fitCenter" />
 
         <ImageView
             android:id="@+id/preview_button"
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
-            android:padding="@dimen/icon_button_margin"
-            android:layout_marginBottom="6dp"
-            android:src="@drawable/preview_button_dark"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"/>
+            android:layout_marginBottom="6dp"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/icon_button_margin"
+            android:src="@drawable/preview_button_dark" />
 
         <ImageView
             android:id="@+id/reset_button"
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
-            android:padding="@dimen/icon_button_margin"
-            android:layout_marginBottom="6dp"
-            android:src="@drawable/reset_button"
             android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:background="@android:color/transparent"/>
+            android:layout_marginBottom="6dp"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/icon_button_margin"
+            android:src="@drawable/reset_button" />
 
         <ImageView
             android:id="@+id/resize_button"
             android:layout_width="@dimen/icon_button_size"
             android:layout_height="@dimen/icon_button_size"
-            android:padding="@dimen/icon_button_margin"
-            android:src="@drawable/resize_small"
             android:layout_alignParentEnd="true"
-            android:background="@android:color/transparent"/>
+            android:background="@android:color/transparent"
+            android:padding="@dimen/icon_button_margin"
+            android:src="@drawable/resize_small" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -92,6 +93,7 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <EditText
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="@color/red" />
+
                 </TableRow>
 
                 <TableRow>
@@ -115,6 +117,7 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <EditText
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="@color/green" />
+
                 </TableRow>
 
                 <TableRow>
@@ -138,6 +141,7 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <EditText
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="@color/blue" />
+
                 </TableRow>
 
                 <TableRow>
@@ -151,12 +155,14 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <EditText style="@style/AppTheme.InputNewFilterElement" />
 
                     <EditText style="@style/AppTheme.InputNewFilterElement" />
+
                 </TableRow>
+
             </TableLayout>
 
             <TableLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <TableRow>
 
@@ -179,7 +185,9 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <View
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="#00000000" />
+
                 </TableRow>
+
                 <TableRow>
 
                     <View
@@ -201,7 +209,9 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <View
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="#00000000" />
+
                 </TableRow>
+
                 <TableRow>
 
                     <View
@@ -223,7 +233,9 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <View
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="#00000000" />
+
                 </TableRow>
+
                 <TableRow>
 
                     <View
@@ -245,25 +257,13 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     <View
                         style="@style/AppTheme.InputNewFilterElement"
                         android:background="#00000000" />
-                </TableRow>
 
+                </TableRow>
 
             </TableLayout>
-        </FrameLayout>
-        <!--<LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
-            android:orientation="horizontal">
-            <GridView
-                android:id="@+id/array_input_grid"
-                android:layout_width="match_parent"
-                android:layout_height="125dp"
-                android:numColumns="5"
-                android:stretchMode="columnWidth">
 
-            </GridView>
-        </LinearLayout>-->
+        </FrameLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/tab_bar_border"
@@ -284,7 +284,7 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                 <TextView
                     style="@style/AppTheme.HeadLine"
                     android:paddingLeft="8dp"
-                    android:text="new filter" />
+                    android:text="@string/new_filter" />
 
                 <ImageView
                     android:id="@+id/help_button"
@@ -293,6 +293,7 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                     android:layout_gravity="center"
                     android:padding="8dp"
                     android:src="@drawable/faq_button" />
+
             </LinearLayout>
 
             <ImageView
@@ -313,12 +314,14 @@ tools:context="com.project.yura.photoeditor.ui.activity.NewFilterActivity">
                 android:paddingEnd="14dp"
                 android:paddingStart="14dp"
                 android:src="@drawable/ok_icon" />
+
         </RelativeLayout>
+
     </LinearLayout>
 
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:focusable="true"/>
+        android:focusable="true" />
 
 </LinearLayout>

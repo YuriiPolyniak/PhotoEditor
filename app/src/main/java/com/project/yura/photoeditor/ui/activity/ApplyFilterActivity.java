@@ -17,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 
 import com.project.yura.photoeditor.R;
+import com.project.yura.photoeditor.event.ui.DeleteFilterEvent;
+import com.project.yura.photoeditor.event.ui.FilterSelectedEvent;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.manager.PreferencesHelper;
 import com.project.yura.photoeditor.processing.CustomFilters;
@@ -24,6 +26,7 @@ import com.project.yura.photoeditor.processing.IFilter;
 import com.project.yura.photoeditor.processing.model.PreviewData;
 import com.project.yura.photoeditor.ui.adapter.PreviewAdapter;
 import com.project.yura.photoeditor.utils.Helper;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,14 +35,7 @@ import java.util.Set;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class ApplyFilterActivity extends BaseActivity
-        implements PreviewAdapter.IUpdateFilter {
-    private List<PreviewData> previews;
-    private PreviewData selectedFilter;
-    private Bitmap editedBitmap = null;
-    private Bitmap scaledOriginalBitmap = null;
-    private Bitmap realEditedBitmap = null;
-    private CurrentSession currentSession;
+public class ApplyFilterActivity extends BaseActivity {
 
     @BindView(R.id.imageToEdit)
     ImageView imageView;
@@ -55,6 +51,13 @@ public class ApplyFilterActivity extends BaseActivity
     SeekBar seekBar;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
+
+    private List<PreviewData> previews;
+    private PreviewData selectedFilter;
+    private Bitmap editedBitmap = null;
+    private Bitmap scaledOriginalBitmap = null;
+    private Bitmap realEditedBitmap = null;
+    private CurrentSession currentSession;
 
     private PreviewAdapter adapter;
     private RecyclerView recyclerView;
@@ -73,9 +76,6 @@ public class ApplyFilterActivity extends BaseActivity
         super.onCreate(savedInstanceState);
 
         currentSession = CurrentSession.GetInstance();
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
         scaledOriginalBitmap = currentSession.currentBitmap;/*Helper.ResizeBitmap(
                 currentSession.currentBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels, false);*/
@@ -148,8 +148,7 @@ public class ApplyFilterActivity extends BaseActivity
         List<PreviewData> adapterData = new ArrayList<>(previews);
         adapterData.addAll(ufPreviews);
 
-        //adapter.updateFiltersList(ufPreviews);
-        adapter = new PreviewAdapter(this, adapterData, onItemSelectListener, true);
+        adapter = new PreviewAdapter(this, adapterData, true);
         recyclerView.setAdapter(adapter);
     }
 
@@ -173,11 +172,6 @@ public class ApplyFilterActivity extends BaseActivity
     // hide action bar
     @OnClick(R.id.resize_button)
     void resizeClick(View view) {
-//        TransitionSet transitionSet = new TransitionSet();
-//        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
-//        transitionSet.addTransition(new AutoTransition());
-//
-//        TransitionManager.beginDelayedTransition(workspaceLayout, transitionSet);
         if (barToHide.getVisibility() == View.VISIBLE) {
             barToHide.setVisibility(View.GONE);
             resizeButton.setImageResource(R.drawable.resize_big);
@@ -191,9 +185,6 @@ public class ApplyFilterActivity extends BaseActivity
     public void onBackPressed() {
         if (barToHide.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
-            //Intent intent = new Intent(this, EditImageActivity.class);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            //startActivity(intent);
             overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
         } else {
             resizeClick(resizeButton);
@@ -220,61 +211,56 @@ public class ApplyFilterActivity extends BaseActivity
     @OnClick(R.id.ok_button)
     public void saveResult(View view) {
         if (editedBitmap != null) {
-            currentSession.currentBitmap = editedBitmap; //TODO return updated original image (don't think this is important)
-//            currentSession.currentBitmap = selectedFilter.getFilter().applyFilter(
-//                    currentSession.currentBitmap,
-//                    seekBar.getProgress());
+            currentSession.currentBitmap = editedBitmap;
         }
         onBackPressed();
     }
 
-    View.OnClickListener onItemSelectListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            seekBar.setVisibility(View.VISIBLE);
-            likeButton.setVisibility(View.VISIBLE);
+    @Subscribe
+    public void onFilterSelected(FilterSelectedEvent event) {
+        selectedFilter = event.getData();
 
-            selectedFilter = (PreviewData) v.getTag();
-            String filterName = selectedFilter.getFilter().getName();
-            Log.d("LOG from filter", filterName);
+        seekBar.setVisibility(View.VISIBLE);
+        likeButton.setVisibility(View.VISIBLE);
 
-            if (!filterName.equals(PreviewAdapter.NEW_FILTER)) {
-                if (selectedFilter.getFilter().hasWeight()) {
-                    seekBar.setVisibility(View.VISIBLE);
-                } else {
-                    seekBar.setVisibility(View.GONE);
-                }
+        String filterName = selectedFilter.getFilter().getName();
+        Log.d("LOG from filter", filterName);
 
-                if (seekBar.getProgress() == 50) {
-                    applyFilter();
-                } else {
-                    seekBar.setProgress(50);
-                }
+        if (!filterName.equals(PreviewAdapter.NEW_FILTER)) {
+            if (selectedFilter.getFilter().hasWeight()) {
+                seekBar.setVisibility(View.VISIBLE);
+            } else {
+                seekBar.setVisibility(View.GONE);
+            }
 
-                //TODO decide what to do with like on your own filters
-                //cant like custom filters, they terrible
+            if (seekBar.getProgress() == 50) {
+                applyFilter();
+            } else {
+                seekBar.setProgress(50);
+            }
+
+            //TODO decide what to do with like on your own filters
+            //cant like custom filters, they terrible
                 /*if (selectedFilter.getIsCustom()) {
                     likeButton.setVisibility(View.GONE);
                 }*/
 
-                if (selectedFilter.getIsLiked()) {
-                    likeButton.setImageResource(R.drawable.like_enabled);
-                    displayLiked = true;
-                } else {
-                    likeButton.setImageResource(R.drawable.like_disabled);
-                    displayLiked = false;
-                }
-            } else { //open create new filter activity
-                seekBar.setVisibility(View.GONE);
-                likeButton.setVisibility(View.GONE);
-                editedBitmap = scaledOriginalBitmap;
-                imageView.setImageBitmap(editedBitmap);
-                startActivity(new Intent(getApplicationContext(), NewFilterActivity.class));
+            if (selectedFilter.getIsLiked()) {
+                likeButton.setImageResource(R.drawable.like_enabled);
+                displayLiked = true;
+            } else {
+                likeButton.setImageResource(R.drawable.like_disabled);
+                displayLiked = false;
             }
-            //apply actual filter
+        } else { //open create new filter activity
+            seekBar.setVisibility(View.GONE);
+            likeButton.setVisibility(View.GONE);
+            editedBitmap = scaledOriginalBitmap;
+            imageView.setImageBitmap(editedBitmap);
+            startActivity(new Intent(getApplicationContext(), NewFilterActivity.class));
         }
-    };
-
+        //apply actual filter
+    }
 
     void applyFilter() {
         startImageProcessing();
@@ -325,9 +311,11 @@ public class ApplyFilterActivity extends BaseActivity
         recyclerView.scrollToPosition(newPos);
     }
 
-    @Override
-    public void deleteFilter(final PreviewData filter) {
+    @Subscribe
+    public void onDeleteFilter(DeleteFilterEvent event) {
+        final PreviewData filter = event.getData();
         final String filterName = filter.getFilter().getName();
+
         final AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Delete filter?")
                 .setMessage("Do you really want to delete the \"" + filterName + "\" filter?")
@@ -338,8 +326,6 @@ public class ApplyFilterActivity extends BaseActivity
                         PreferencesHelper.getInstance()
                                 .removeCustomFilter(filterName);
                         adapter.removeFilter(filter);
-
-                        //imageView.setImageBitmap(editedBitmap);
                     }
                 })
                 .create();

@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,17 +18,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableLayout;
 
-import com.project.yura.photoeditor.ui.dialog.SaveFilterDialog;
+import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.manager.PreferencesHelper;
-import com.project.yura.photoeditor.R;
+import com.project.yura.photoeditor.ui.dialog.SaveFilterDialog;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class NewFilterActivity extends BaseActivity
-        implements SaveFilterDialog.ISaveFilter {
+public class NewFilterActivity extends BaseActivity {
 
     @BindView(R.id.imageToEdit)
     ImageView imageToEdit;
@@ -39,7 +36,6 @@ public class NewFilterActivity extends BaseActivity
     ImageView resizeButton;
     @BindView(R.id.layout_to_hide)
     ViewGroup layoutToHide;
-    //@BindView(R.id.array_input_grid) GridView inputGrid;
     @BindView(R.id.input_numbers)
     TableLayout inputNumbers;
 
@@ -47,7 +43,6 @@ public class NewFilterActivity extends BaseActivity
     private CurrentSession currentSession;
 
     private boolean displayOriginal = false;
-    //Float[] inputElements;// = new Float[4*5];
     private double[] inputElements;
     private float[] floatInputElements;
     private final EditText[] inputEditTexts = new EditText[20];
@@ -110,32 +105,24 @@ public class NewFilterActivity extends BaseActivity
     }
 
     @OnClick(R.id.cancel_button)
-    void cancelClick(View view) {
+    void cancelClick() {
         onBackPressed();
     }
 
     @OnClick(R.id.ok_button)
-    void okClick(View view) {
-        /*SaveFilterDialog dialog = SaveFilterDialog.getDialog(new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                NewFilterActivity.super.onBackPressed();
+    void okClick() {
+        SaveFilterDialog dialog = SaveFilterDialog.getDialog(name -> {
+
+            floatInputElements = new float[inputElements.length];
+            for (int i = 0; i < inputElements.length; i++) {
+                floatInputElements[i] = (float) inputElements[i];
             }
-        });*/
-        SaveFilterDialog dialog = SaveFilterDialog.getDialog(this);
+            PreferencesHelper.getInstance().addCustomFilter(name, floatInputElements);
+
+            NewFilterActivity.super.onBackPressed();
+        });
+
         dialog.show(getFragmentManager(), "");
-
-    }
-
-    @Override
-    public void saveFilter(String name) {
-        floatInputElements = new float[inputElements.length];
-        for (int i = 0; i < inputElements.length; i++) {
-            floatInputElements[i] = (float) inputElements[i];
-        }
-        PreferencesHelper.getInstance().addCustomFilter(name, floatInputElements);
-
-        NewFilterActivity.super.onBackPressed();
     }
 
     // show image without change (and hide)
@@ -172,42 +159,35 @@ public class NewFilterActivity extends BaseActivity
                 .setTitle("Reset?")
                 .setMessage("Reset color correction matrix?")
                 .setNegativeButton("Cancel", null)
-                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("Ok", (dialog1, which) -> {
 
-                        inputElements = new double[]{
-                                1f, 0f, 0f, 0f, 0f,
-                                0f, 1f, 0f, 0f, 0f,
-                                0f, 0f, 1f, 0f, 0f,
-                                0f, 0f, 0f, 1f, 0f,
-                        };
+                    inputElements = new double[]{
+                            1f, 0f, 0f, 0f, 0f,
+                            0f, 1f, 0f, 0f, 0f,
+                            0f, 0f, 1f, 0f, 0f,
+                            0f, 0f, 0f, 1f, 0f,
+                    };
 
-                        int saveCurrentIndex = currentIndex;
-                        for (int i = 0; i < inputElements.length; i++) {
-                            currentIndex = i;
-                            inputEditTexts[i].setText(String.valueOf(inputElements[i]));
-                        }
-                        applyMatrix();
-                        currentIndex = saveCurrentIndex;
-                        if (currentIndex >= 0) {
-                            inputEditTexts[currentIndex].setSelection(
-                                    inputEditTexts[currentIndex].getText().length());
-                        }
+                    int saveCurrentIndex = currentIndex;
+                    for (int i = 0; i < inputElements.length; i++) {
+                        currentIndex = i;
+                        inputEditTexts[i].setText(String.valueOf(inputElements[i]));
+                    }
+                    applyMatrix();
+                    currentIndex = saveCurrentIndex;
+                    if (currentIndex >= 0) {
+                        inputEditTexts[currentIndex].setSelection(
+                                inputEditTexts[currentIndex].getText().length());
                     }
                 })
                 .create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface arg) {
-                dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                        .setTextColor(getResources().getColor(R.color.darkOrange));
-                dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-                        .setTextColor(getResources().getColor(R.color.colorText));
-            }
+        dialog.setOnShowListener(arg -> {
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    .setTextColor(getResources().getColor(R.color.darkOrange));
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+                    .setTextColor(getResources().getColor(R.color.colorText));
         });
         dialog.show();
-
     }
 
     @OnClick(R.id.help_button)
@@ -236,31 +216,24 @@ public class NewFilterActivity extends BaseActivity
             }
         }
 
-        View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                //Log.d("FOCUS", String.valueOf((int)v.getTag()) + " " + String.valueOf(hasFocus));
-                if (!hasFocus) {
-                    EditText editText = (EditText) v;
-                    String text = editText.getText().toString();
-                    if (text.equals("") ||
-                            text.equals("-") ||
-                            text.equals(".") ||
-                            text.equals(",")
-                            ) {
-                        editText.setText("0.0");
-                    }
+        View.OnFocusChangeListener focusListener = (v, hasFocus) -> {
+            if (!hasFocus) {
+                EditText editText = (EditText) v;
+                String text = editText.getText().toString();
+                if (text.equals("") ||
+                        text.equals("-") ||
+                        text.equals(".") ||
+                        text.equals(",")
+                        ) {
+                    editText.setText("0.0");
                 }
             }
         };
 
         //updateInputEdit();
-        View.OnTouchListener listener = new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                currentIndex = (int) v.getTag();
-                return false;
-            }
+        View.OnTouchListener listener = (v, event) -> {
+            currentIndex = (int) v.getTag();
+            return false;
         };
 
         TextWatcher watcher = new TextWatcher() {
@@ -341,5 +314,4 @@ public class NewFilterActivity extends BaseActivity
             previewClick(previewButton);
         }
     }
-
 }

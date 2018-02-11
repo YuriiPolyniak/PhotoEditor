@@ -4,9 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.PorterDuff;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,18 +12,17 @@ import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.project.yura.photoeditor.ui.dialog.ColorPickerDialog;
+import com.bumptech.glide.Glide;
+import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.processing.model.CustomAdjust;
-import com.project.yura.photoeditor.R;
+import com.project.yura.photoeditor.ui.dialog.ColorPickerDialog;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ApplyAdjustActivity extends BaseActivity
-        implements ColorPickerDialog.IUpdate {
+public class ApplyAdjustActivity extends BaseActivity {
 
     @BindView(R.id.imageToEdit)
     ImageView imageView;
@@ -47,8 +44,6 @@ public class ApplyAdjustActivity extends BaseActivity
     SeekBar seekBarBalance;
     @BindView(R.id.progress_bar)
     ProgressBar mProgressBar;
-
-    //@BindView(R.id.activity_apply_adjust) LinearLayout workspaceLayout;
     @BindView(R.id.crop_image_view)
     CropImageView cropImageView;
 
@@ -73,24 +68,25 @@ public class ApplyAdjustActivity extends BaseActivity
 
         currentSession = CurrentSession.GetInstance();
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        scaledOriginalBitmap = currentSession.currentBitmap;
+        editedBitmap = scaledOriginalBitmap;
 
-        scaledOriginalBitmap = currentSession.currentBitmap;/*Helper.ResizeBitmap(
-                currentSession.currentBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels, false);*/
-        editedBitmap = scaledOriginalBitmap; //currentSession.currentBitmap;
-        //imageView = (ImageView)findViewById(R.id.imageToEdit);
-        imageView.setImageBitmap(scaledOriginalBitmap); //currentSession.currentBitmap
+        customAdjust = new CustomAdjust();
+        adjustParameters = new CustomAdjust.AdjustParameters();
+
+        initUI();
+    }
+
+    private void initUI() {
+        loadImage(scaledOriginalBitmap);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
@@ -98,7 +94,7 @@ public class ApplyAdjustActivity extends BaseActivity
                 startImageProcessing();
                 adjustParameters.update(adjustCurrentType, seekBar.getProgress());
                 if (displayOriginal) {
-                    previewClick(null);
+                    previewClick();
                 }
 
                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -112,12 +108,11 @@ public class ApplyAdjustActivity extends BaseActivity
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
 
-                        imageView.setImageBitmap(editedBitmap);
+                        loadImage(editedBitmap);
                         stopImageProcessing();
                     }
                 };
                 task.execute();
-
             }
         });
 
@@ -137,7 +132,7 @@ public class ApplyAdjustActivity extends BaseActivity
                 startImageProcessing();
                 adjustParameters.update(adjustCurrentType, seekBar.getProgress());
                 if (displayOriginal) {
-                    previewClick(null);
+                    previewClick();
                 }
 
                 AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
@@ -153,22 +148,24 @@ public class ApplyAdjustActivity extends BaseActivity
                     protected void onPostExecute(Void aVoid) {
                         super.onPostExecute(aVoid);
 
-                        imageView.setImageBitmap(editedBitmap);
+                        loadImage(editedBitmap);
                         stopImageProcessing();
                     }
                 };
                 task.execute();
-                //applyFilter(true);
             }
         });
-
-        customAdjust = new CustomAdjust();
-        adjustParameters = new CustomAdjust.AdjustParameters();
 
         seekBarBalance.getProgressDrawable().setColorFilter(adjustParameters.get(CustomAdjust.AdjustType.BALANCE, CustomAdjust.AdjustTypeParameter.COLOR), PorterDuff.Mode.SRC_IN);
         seekBarBalance.getThumb().setColorFilter(adjustParameters.get(CustomAdjust.AdjustType.BALANCE, CustomAdjust.AdjustTypeParameter.COLOR), PorterDuff.Mode.SRC_IN);
 
         cropImageView.setImageBitmap(editedBitmap);
+    }
+
+    private void loadImage(Bitmap bitmap) {
+        Glide.with(this)
+                .load(bitmap)
+                .into(imageView);
     }
 
     @Override
@@ -182,7 +179,7 @@ public class ApplyAdjustActivity extends BaseActivity
             super.onBackPressed();
             overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
         } else {
-            resizeClick(resizeButton);
+            resizeClick();
         }
     }
     //endregion
@@ -191,14 +188,14 @@ public class ApplyAdjustActivity extends BaseActivity
 
     // show image without change (and hide)
     @OnClick(R.id.preview_button)
-    void previewClick(View view) {
+    void previewClick() {
         if (editedBitmap != null) {
             if (displayOriginal) {
-                imageView.setImageBitmap(editedBitmap);
+                loadImage(editedBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_dark);
                 displayOriginal = false;
             } else {
-                imageView.setImageBitmap(scaledOriginalBitmap);
+                loadImage(scaledOriginalBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_light);
                 displayOriginal = true;
             }
@@ -207,7 +204,7 @@ public class ApplyAdjustActivity extends BaseActivity
 
     // hide action bar
     @OnClick(R.id.resize_button)
-    void resizeClick(View view) {
+    void resizeClick() {
         if (barToHide.getVisibility() == View.VISIBLE) {
             barToHide.setVisibility(View.GONE);
             resizeButton.setImageResource(R.drawable.resize_big);
@@ -226,7 +223,17 @@ public class ApplyAdjustActivity extends BaseActivity
     @OnClick(R.id.color_picker_button)
     public void openColorPicker(View view) {
         ColorPickerDialog dialog = ColorPickerDialog.getDialog(
-                this,
+                (color, radius) -> {
+                    adjustParameters.update(adjustCurrentType, CustomAdjust.AdjustTypeParameter.COLOR, color);
+                    adjustParameters.update(adjustCurrentType, CustomAdjust.AdjustTypeParameter.RADIUS, radius);
+
+                    //update SeekBar color
+                    seekBarBalance.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+                    seekBarBalance.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
+
+                    seekBarBalance.setProgress(50);
+                    seekBarBalance.setContentDescription(String.valueOf(color));
+                },
                 adjustParameters.get(adjustCurrentType,
                         CustomAdjust.AdjustTypeParameter.COLOR),
                 adjustParameters.get(adjustCurrentType,
@@ -304,25 +311,19 @@ public class ApplyAdjustActivity extends BaseActivity
         mProgressBar.setVisibility(View.GONE);
     }
 
-    public void returnBack(View view) {
+    @OnClick(R.id.cancel_button)
+    public void returnBack() {
         onBackPressed();
     }
 
-    public void saveResult(View view) {
+    @OnClick(R.id.ok_button)
+    public void saveResult() {
         if (editedBitmap != null) {
-//            editedBitmap = customAdjust.AdjustBrightness(currentSession.currentBitmap, adjustParameters);
-//            editedBitmap = customAdjust.AdjustContrast(editedBitmap, adjustParameters);
-//            editedBitmap = customAdjust.AdjustBalance(editedBitmap, adjustParameters);
-//            editedBitmap = customAdjust.AdjustSaturation(editedBitmap, adjustParameters);
             if (adjustCurrentType == CustomAdjust.AdjustType.CROP) {
                 currentSession.currentBitmap = cropImageView.getCroppedImage();
             } else {
                 currentSession.currentBitmap = editedBitmap;
             }
-            //currentSession.currentBitmap = editedBitmap;
-            /*selectedFilter.getFilter().applyFilter(
-                    currentSession.currentBitmap,
-                    seekBar.getProgress());*/
         }
         onBackPressed();
     }
@@ -336,7 +337,7 @@ public class ApplyAdjustActivity extends BaseActivity
             colorPickerButton.setVisibility(View.VISIBLE);
             cropImageView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(editedBitmap);
+            loadImage(editedBitmap);
             previewButton.setVisibility(View.VISIBLE);
             resizeButton.setVisibility(View.VISIBLE);
             rotateLeftButton.setVisibility(View.GONE);
@@ -361,16 +362,15 @@ public class ApplyAdjustActivity extends BaseActivity
             colorPickerButton.setVisibility(View.GONE);
             cropImageView.setVisibility(View.GONE);
             imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(editedBitmap);
+            loadImage(editedBitmap);
             previewButton.setVisibility(View.VISIBLE);
             resizeButton.setVisibility(View.VISIBLE);
             rotateLeftButton.setVisibility(View.GONE);
             rotateRightButton.setVisibility(View.GONE);
-
         }
 
         if (displayOriginal) {
-            previewClick(null);
+            previewClick();
         }
 
         int imageRes = -1;
@@ -461,30 +461,7 @@ public class ApplyAdjustActivity extends BaseActivity
             editedBitmap = customAdjust.adjustBrightness(scaledOriginalBitmap, adjustParameters);
             editedBitmap = customAdjust.adjustContrast(editedBitmap, adjustParameters);
             editedBitmap = customAdjust.adjustSaturation(editedBitmap, adjustParameters);
-
-            //balanceEditedBitmap = editedBitmap;
         }
-
-        //removed to asyncTask
-        //imageView.setImageBitmap(editedBitmap);
     }
-
-    //endregion
-
-    //region IUpdate
-
-    @Override
-    public void UpdateBalance(int color, int radius) {
-        adjustParameters.update(adjustCurrentType, CustomAdjust.AdjustTypeParameter.COLOR, color);
-        adjustParameters.update(adjustCurrentType, CustomAdjust.AdjustTypeParameter.RADIUS, radius);
-
-        //update SeekBar color
-        seekBarBalance.getProgressDrawable().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-        seekBarBalance.getThumb().setColorFilter(color, PorterDuff.Mode.SRC_IN);
-
-        seekBarBalance.setProgress(50);
-        seekBarBalance.setContentDescription(String.valueOf(color));
-    }
-
     //endregion
 }

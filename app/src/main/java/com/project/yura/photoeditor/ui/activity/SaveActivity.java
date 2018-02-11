@@ -4,18 +4,16 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Environment;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
+import android.os.Environment;
 import android.widget.Toast;
 
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
+import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.utils.Helper;
-import com.project.yura.photoeditor.R;
 import com.project.yura.photoeditor.utils.NetworkUtils;
 import com.project.yura.photoeditor.utils.PackageUtils;
 
@@ -106,7 +104,7 @@ public class SaveActivity extends BaseActivity {
         overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
     }
 
-    @OnClick(R.id.save_facebook_click)
+    @OnClick(R.id.save_facebook_button)
     public void shareFacebook() {
         String appName = "Facebook";
 
@@ -139,7 +137,7 @@ public class SaveActivity extends BaseActivity {
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_title)));
     }
 
-    @OnClick(R.id.save_vk_click)
+    @OnClick(R.id.save_vk_button)
     public void shareVK() {
         sharePhoto("VK", VK_PACKAGE);
     }
@@ -149,7 +147,7 @@ public class SaveActivity extends BaseActivity {
         sharePhoto("Viber", VIBER_PACKAGE);
     }
 
-    @OnClick(R.id.save_instagram_click)
+    @OnClick(R.id.save_instagram_button)
     public void shareInstagram() {
         sharePhoto("Instagram", INSTAGRAM_PACKAGE);
     }

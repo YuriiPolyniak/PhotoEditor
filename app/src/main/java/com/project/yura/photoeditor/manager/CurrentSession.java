@@ -7,8 +7,8 @@ public class CurrentSession {
     private static CurrentSession _instance = null;
 
     public Bitmap currentBitmap = null;
-    public String path = null;
-    public String realPath = null;
+//    public String path = null;
+//    public String realPath = null;
     public Uri imageUri = null;
 
     private CurrentSession(){ }

@@ -12,5 +12,17 @@
     <string name="share_on">Share on</string>
     <string name="take_photo">Take photo</string>
     <string name="choose_photo">Choose photo</string>
+    <string name="crop">Crop</string>
+    <string name="saturation">Saturation</string>
+    <string name="balance">Balance</string>
+    <string name="contrast">Contrast</string>
+    <string name="bright">Bright</string>
+    <string name="adjust_option">Adjust</string>
+    <string name="frame_option">Frame</string>
+    <string name="filter_option">Filter</string>
+    <string name="new_filter">New filter</string>
+    <string name="from">From:</string>
+    <string name="selected">Selected:</string>
+    <string name="to">To:</string>
 
 </resources>

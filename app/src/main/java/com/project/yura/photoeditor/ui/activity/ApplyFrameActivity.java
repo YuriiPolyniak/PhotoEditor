@@ -12,36 +12,46 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 
+import com.bumptech.glide.Glide;
 import com.project.yura.photoeditor.R;
+import com.project.yura.photoeditor.event.ui.FilterSelectedEvent;
 import com.project.yura.photoeditor.manager.CurrentSession;
 import com.project.yura.photoeditor.processing.CustomFrameFilters;
 import com.project.yura.photoeditor.processing.IFilter;
 import com.project.yura.photoeditor.processing.model.PreviewData;
 import com.project.yura.photoeditor.ui.adapter.PreviewAdapter;
 import com.project.yura.photoeditor.utils.Helper;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ApplyFrameActivity extends BaseActivity {
+
+    @BindView(R.id.imageToEdit)
+    ImageView imageView;
+    @BindView(R.id.preview_button)
+    ImageView previewButton;
+    @BindView(R.id.resize_button)
+    ImageView resizeButton;
+    @BindView(R.id.seek_bar)
+    SeekBar seekBar;
+    @BindView(R.id.layout_to_hide)
+    ViewGroup barToHide;
+    @BindView(R.id.preview_recycler)
+    RecyclerView previewRecycler;
 
     private List<PreviewData> previews;
     private PreviewData selectedFilter;
     private Bitmap editedBitmap = null;
     private Bitmap scaledOriginalBitmap = null;
-    private Bitmap realEditedBitmap = null;
     private CurrentSession currentSession;
     private CustomFrameFilters customFilters;
-    private ImageView imageView;
-    private ImageView previewButton;
-    private ImageView resizeButton;
-    private SeekBar seekBar;
-    private ViewGroup barToHide;
 
     private boolean displayOriginal;
-    private LinearLayout workspaceLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,19 +59,30 @@ public class ApplyFrameActivity extends BaseActivity {
 
         currentSession = CurrentSession.GetInstance();
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        scaledOriginalBitmap = currentSession.currentBitmap;
+        editedBitmap = scaledOriginalBitmap;
 
-        scaledOriginalBitmap = currentSession.currentBitmap; /*Helper.ResizeBitmap(
-                currentSession.currentBitmap, displayMetrics.widthPixels, displayMetrics.heightPixels, false);*/
-        editedBitmap = scaledOriginalBitmap; //currentSession.currentBitmap;
-        imageView = (ImageView) findViewById(R.id.imageToEdit);
-        imageView.setImageBitmap(scaledOriginalBitmap); //currentSession.currentBitmap
-        previewButton = (ImageView) findViewById(R.id.preview_button);
-        resizeButton = (ImageView) findViewById(R.id.resize_button);
-        barToHide = (ViewGroup) findViewById(R.id.layout_to_hide);
-        workspaceLayout = (LinearLayout) findViewById(R.id.activity_apply_frame);
-        seekBar = (SeekBar) findViewById(R.id.seek_bar);
+        customFilters = new CustomFrameFilters(this);
+
+        initPreviews();
+
+        initUI();
+    }
+
+    private void initPreviews() {
+        Bitmap previewBitmap = Helper.ResizeBitmap(editedBitmap, 2 * 72, 2 * 80, true);
+
+        int weight = 50;
+        previews = new ArrayList<>();
+        IFilter[] filters = customFilters.getFilters();
+        for (IFilter f : filters) {
+            previews.add(new PreviewData(
+                    f.applyFilter(previewBitmap, weight), f, false, false));
+        }
+    }
+
+    private void initUI() {
+        loadImage(scaledOriginalBitmap);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -82,27 +103,18 @@ public class ApplyFrameActivity extends BaseActivity {
             }
         });
 
-        customFilters = new CustomFrameFilters(this);
-
-
-        Bitmap previewBitmap = Helper.ResizeBitmap(editedBitmap, 2 * 72, 2 * 80, true);
-
-        int weight = 50;
-        previews = new ArrayList<>();
-        IFilter[] filters = customFilters.getFilters();
-        for (IFilter f : filters) {
-            previews.add(new PreviewData(
-                    f.applyFilter(previewBitmap, weight), f, false, false));
-        }
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.preview_recycler);
-        recyclerView.setHasFixedSize(true);
+        previewRecycler.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
+        previewRecycler.setLayoutManager(layoutManager);
 
-        PreviewAdapter adapter = new PreviewAdapter(this, previews, onItemSelectListener, false);
-        recyclerView.setAdapter(adapter);
+        PreviewAdapter adapter = new PreviewAdapter(this, previews, false);
+        previewRecycler.setAdapter(adapter);
+    }
 
+    private void loadImage(Bitmap bitmap) {
+        Glide.with(this)
+                .load(bitmap)
+                .into(imageView);
     }
 
     @Override
@@ -115,11 +127,11 @@ public class ApplyFrameActivity extends BaseActivity {
     void previewClick(View view) {
         if (editedBitmap != null) {
             if (displayOriginal) {
-                imageView.setImageBitmap(editedBitmap);
+                loadImage(editedBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_dark);
                 displayOriginal = false;
             } else {
-                imageView.setImageBitmap(scaledOriginalBitmap);//currentSession.currentBitmap);
+                loadImage(scaledOriginalBitmap);
                 previewButton.setImageResource(R.drawable.preview_button_light);
                 displayOriginal = true;
             }
@@ -128,14 +140,7 @@ public class ApplyFrameActivity extends BaseActivity {
 
     // hide action bar
     @OnClick(R.id.resize_button)
-    void resizeClick(View view) {
-//        TransitionSet transitionSet = new TransitionSet();
-//        transitionSet.setOrdering(TransitionSet.ORDERING_TOGETHER);
-//        transitionSet.addTransition(new AutoTransition());
-//
-//        TransitionManager.beginDelayedTransition(workspaceLayout, transitionSet);
-
-
+    void resizeClick() {
         if (barToHide.getVisibility() == View.VISIBLE) {
             barToHide.setVisibility(View.GONE);
             resizeButton.setImageResource(R.drawable.resize_big);
@@ -151,45 +156,43 @@ public class ApplyFrameActivity extends BaseActivity {
             super.onBackPressed();
             overridePendingTransition(R.anim.slide_down_to, R.anim.slide_down_from);
         } else {
-            resizeClick(resizeButton);
+            resizeClick();
         }
     }
 
-    public void returnBack(View view) {
+    @OnClick(R.id.cancel_button)
+    public void returnBack() {
         onBackPressed();
     }
 
-    public void saveResult(View view) {
+    @OnClick(R.id.ok_button)
+    public void saveResult() {
         if (editedBitmap != null) {
             currentSession.currentBitmap = editedBitmap;
-//            currentSession.currentBitmap = selectedFilter.getFilter().applyFilter(
-//                    currentSession.currentBitmap,
-//                    seekBar.getProgress());
         }
         onBackPressed();
     }
 
-    View.OnClickListener onItemSelectListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+    @Subscribe
+    public void onFilterSelected(FilterSelectedEvent event) {
+        selectedFilter = event.getData();
+
+        seekBar.setVisibility(View.VISIBLE);
+
+        Log.d("LOG from filter", selectedFilter.getFilter().getName());
+
+        if (selectedFilter.getFilter().hasWeight()) {
             seekBar.setVisibility(View.VISIBLE);
-
-            selectedFilter = (PreviewData) v.getTag();
-            Log.d("LOG from filter", selectedFilter.getFilter().getName());
-
-            if (selectedFilter.getFilter().hasWeight()) {
-                seekBar.setVisibility(View.VISIBLE);
-            } else {
-                seekBar.setVisibility(View.GONE);
-            }
-
-            if (seekBar.getProgress() == 50) {
-                applyFilter();
-            } else {
-                seekBar.setProgress(50);
-            }
+        } else {
+            seekBar.setVisibility(View.GONE);
         }
-    };
+
+        if (seekBar.getProgress() == 50) {
+            applyFilter();
+        } else {
+            seekBar.setProgress(50);
+        }
+    }
 
     void applyFilter() {
         editedBitmap = selectedFilter.getFilter().applyFilter(
@@ -198,7 +201,7 @@ public class ApplyFrameActivity extends BaseActivity {
         if (displayOriginal) {
             previewClick(null);
         } else {
-            imageView.setImageBitmap(editedBitmap);
+            loadImage(editedBitmap);
         }
     }
 }
