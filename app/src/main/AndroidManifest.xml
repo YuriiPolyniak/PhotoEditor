@@ -28,7 +28,8 @@
             android:authorities="com.facebook.app.FacebookContentProvider1285296258191279"
             android:exported="true" />
 
-        <activity android:name=".ui.activity.MainActivity"
+        <activity
+            android:name=".ui.activity.MainActivity"
             android:theme="@style/AppTheme.Splash">
 
             <intent-filter>
@@ -45,6 +46,16 @@
         <activity android:name=".ui.activity.ApplyFilterActivity" />
         <activity android:name=".ui.activity.SaveActivity" />
         <activity android:name=".ui.activity.NewFilterActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_provider" />
+        </provider>
     </application>
 
 </manifest>

@@ -10,5 +10,7 @@
     <string name="saved_successfully">Saved Successfully</string>
     <string name="next">Next</string>
     <string name="share_on">Share on</string>
+    <string name="take_photo">Take photo</string>
+    <string name="choose_photo">Choose photo</string>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.project.yura.photoeditor.manager;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 public class CurrentSession {
     private static CurrentSession _instance = null;
@@ -8,6 +9,7 @@ public class CurrentSession {
     public Bitmap currentBitmap = null;
     public String path = null;
     public String realPath = null;
+    public Uri imageUri = null;
 
     private CurrentSession(){ }
 
